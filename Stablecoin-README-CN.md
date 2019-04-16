@@ -5,6 +5,7 @@
 在这种模式下，稳定币供应商根据自身的风险控制能力、资产偏好、选择借贷抵押资产，根据原力协议提供的开发框架，开发抵押、风控、平仓等合约，为持有不同公链资产的用户提供去中心化质押资产借稳定币的服务；
 
 ![avatar](https://raw.githubusercontent.com/theforceprotocolgroup/stablecoin/master/Pictures/Stablecoin%20A.png)
+原力协议基于稳定币场景的技术架构 V0.1
 
 经过市场竞争，在资产组合、风控、用户体验、治理方面最优秀的DAPP团队将会胜出，成为原力协议体系内的主要稳定币供应源之一，维护其发行稳定币的币值稳定。
 
