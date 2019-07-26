@@ -13,3 +13,21 @@ contract DSAuthEvents {
     event LogSetOwner     (address indexed owner);
 }
 
+contract DSAuth is DSAuthEvents {
+    DSAuthority  public  authority;
+    address      public  owner;
+
+    constructor() public {
+        owner = msg.sender;
+        emit LogSetOwner(msg.sender);
+    }
+
+     function setOwner(address owner_) public auth {
+        owner = owner_;
+        emit LogSetOwner(owner);
+    }
+
+    function setAuthority(DSAuthority authority_) public auth {
+        authority = authority_;
+        emit LogSetAuthority(address(authority));
+    }
