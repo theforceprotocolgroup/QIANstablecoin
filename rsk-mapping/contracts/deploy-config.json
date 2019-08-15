@@ -1,0 +1,11 @@
+{
+    "main": {
+        "token": "0x...",
+        "outfile": "deploy-main-output.json"
+    },
+    "side": {
+        "outfile": "deploy-side-output.json"
+    },
+    "federators": ["0x..."],
+    "outdir": "output"
+}

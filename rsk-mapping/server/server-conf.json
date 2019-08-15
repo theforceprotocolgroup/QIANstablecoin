@@ -1,0 +1,30 @@
+{
+    "main": {
+        "token": "0x...",
+        "bridge": "0x...",
+        "networkId": "4",
+        "networkType": "rinkeby",
+        "host": "https://rinkeby.infura.io/v3/...",
+        "manager": "0x...",
+        "startBlockNumber": 4857896,
+        "confirmations": 1,
+        "interval": 30000
+    },
+    "side": {
+        "token": "0x...",
+        "bridge": "0x...",
+        "networkId": "42",
+        "networkType": "kovan",
+        "host": "https://kovan.infura.io/v3/...",
+        "manager": "0x...",
+        "startBlockNumber": 12671300,
+        "confirmations": 1,
+        "interval": 30000
+    },
+    "federators": [
+        {
+            "pkey": "0x...",
+            "address": "0x..."
+        }
+    ]
+}

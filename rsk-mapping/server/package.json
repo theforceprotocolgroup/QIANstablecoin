@@ -1,0 +1,22 @@
+{
+  "name": "scripts",
+  "private": "true",
+  "version": "1.0.0",
+  "description": "Feds scripts",
+  "dependencies": {
+    "ethereumjs-tx": "^1.3.7",
+    "rskapi": "0.0.10",
+    "simpleabi": "^0.0.3",
+    "web3": "^1.2.0"
+  },
+  "devDependencies": {
+    "simpleunit": "0.0.8"
+  },
+  "scripts": {
+    "test": "none",
+    "main": "node ./src/federator.js ./conf/mainconf.json ./conf/sideconf.json",
+    "side": "node ./src/federator.js ./conf/sideconf.json ./conf/mainconf.json"
+  },
+  "keywords": [],
+  "author": ""
+}

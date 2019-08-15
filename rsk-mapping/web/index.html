@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+	<title>Mapping</title>
+
+	<link href="/css/index.css" rel="stylesheet">
+</head>
+
+<body>
+	<div class="content">
+		<div class="hidden" id="msg-window">
+			<span class="title" id="msg-window-title"></span>
+			<span class="msg" id="msg-window-msg"></span>
+			<a href="javascript:;" class="btn" id="msg-window-btn">确定</a>
+		</div>
+		<div class="hidden" id="guide-block">
+			<ul id="guide-next-animate">
+				<li id="approve">
+					<div class="step">
+						授权<a href="javascript:;">Bridge合约</a>可映射的代币数量
+					</div>
+					<div class="current-balance">
+						当前持有<span id="guide-approve-current-balance">NaN</span>
+					</div>
+					<div class="input-group">
+						<span>授权</span>
+						<span class="input-span"><input type="text" name="approve-input"
+								id="guide-approve-input"></span>
+						<span>FOR</span>
+					</div>
+					<div class="step-btns">
+						<a href="javascript:;" class="btn" id="guide-approve-cancel">取消</a>
+						<a href="javascript:;" class="btn" id="guide-approve-next">下一步</a>
+					</div>
+				</li>
+				<li id="transfer">
+					<div class="step">
+						添加映射地址和映射数量
+					</div>
+					<div class="current-balance">
+						当前授权<span id="guide-transfer-current-balance">NaN</span>
+					</div>
+					<div class="input-group">
+						<span>地址</span>
+						<span class="address-input-span"><input type="text" name="address-input"
+								id="guide-address-input"></span>
+					</div>
+					<div class="input-group">
+						<span>数量</span>
+						<span class="input-span"><input type="text" name="balance-input"
+								id="guide-balance-input"></span>
+						<span>FOR</span>
+					</div>
+					<div class="step-btns">
+						<a href="javascript:;" class="btn" id="guide-mapping-prev">上一步</a>
+						<a href="javascript:;" class="btn" id="guide-mapping-end">映射</a>
+					</div>
+				</li>
+				</li>
+			</ul>
+		</div>
+		<div class="mapping-block">
+			<div class="net-blcok">
+				<span class="net-title">Ethereum Mainnet</span>
+				<span class="details">
+					<span class="hidden" id="ethereum-mainnet-mask"></span>
+					<a href="javascript:;" id="ethereum-mainnet-account">NaN</a>
+					<a href="javascript:;" id="ethereum-mainnet-balance">NaN</a>
+				</span>
+			</div>
+
+			<div class="button-block">
+				<a href="javascript:;" class="btn mapping-to" id="mapping-to"><strong>映射</strong></a>
+				<a href="javascript:;" class="btn mapping-from" id="mapping-from"><strong>映射</strong></a>
+			</div>
+
+			<div class="net-blcok">
+				<span class="net-title">RSK Mainnet</span>
+				<span class="details">
+					<span class="hidden" id="rsk-mainnet-mask"></span>
+					<a href="javascript:;" id="rsk-mainnet-account">NaN</a>
+					<a href="javascript:;" id="rsk-mainnet-balance">NaN</a>
+				</span>
+			</div>
+		</div>
+	</div>
+	<script src="js/jquery-3.4.1.min.js"></script>
+	<script src="js/tx.js"></script>
+	<script src="js/conf.js"></script>
+	<script src="js/app.js"></script>
+</body>
+</html>
