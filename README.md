@@ -20,4 +20,4 @@
 
 基于当前架构，原力协议将在最小可实现版本的基础上快速迭代，同时与Open Finance社区保持充分交流，逐步实现更多令人兴奋的链上金融功能。
 
-如果您对我们的项目感兴趣，欢迎联系我们。David Lei，架构师，邮箱：david@theforceprotocol.com
+如果您对我们的项目感兴趣，欢迎联系我们。David Lei，CEO兼架构师，邮箱：david@theforceprotocol.com
