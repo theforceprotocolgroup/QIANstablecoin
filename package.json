@@ -1,8 +1,8 @@
 {
-    "name": "stablecoins",
+    "name": "Qian Stablecoin system",
     "version": "1.0.0",
     "description": "The Force Protocol Stablecoin project",
-    "main": "Qian",
+    "main": "",
     "dependencies": {
       "fs-extra": "^8.1.0",
       "sol-merger": "^1.0.1",
