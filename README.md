@@ -146,7 +146,7 @@ In order to avoid QIAN price fluctuations, diversify risks and improve stability
 
 ## 四、稳定性管理
 
-## IV. Administration of stablecoin
+## IV. Administration of stability
 
 ### 1.动态利息调整机制
 
@@ -232,7 +232,7 @@ FOR 持有者将是整个系统最后收益或风险的承担者。平台的管�
 + 调整提现手续费    
 + 风险参数：债务上限、清算比率、稳定费用、罚金比例
 
-## VI. Platform Management
+## VI. Platform Governance
 
 The platform will eventually be completely handed over to community governance. The main players in the platform include the QIAN creator, the QIAN holder and the holder of the governance token FOR. The purpose of platform governance is to balance the interests of all participants and maintain a stable and sustainable development of the system on the basis of certain trade-offs.
 
