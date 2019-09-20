@@ -4,39 +4,37 @@
 
 ## 一、前言
 
-## A. Introduction
-
 只要有信用，每个人都可以创造货币。
 
-Everyone can create money as long as there is credit.
-
 QIAN旨在搭建一个全球性的，门槛极低的，人人皆可参与创造，人人皆可参与流通的去中心化稳定币生态系统。
+
+## A. Introduction
+
+Everyone can create money as long as there is credit.
 
 QIAN aims to build a global, stable, low-threshold and decentralized stablecoin ecosystem that everyone can participate in.
 
 ### 1. 行业背景
 
-### 1. Background
-
 随着区块链技术和加密数字货币的流行，一种全新的货币形式已经出现。但是，由于加密数字货币的巨大波动性，使得其不能作为交易媒介，不能进行延期支付，也不能作为记帐单位。
-
-With the popularity of blockchain technology and cryptocurrency, a new form of currency has emerged. However, due to the fluctuation of the price of cryptocurrency, it cannot be used as a trading medium, cannot be deferred, and cannot be used as the unit of accounting.
 
 基于对稳定性的需求，出现了以Tether为代表的稳定币，市场规模已达数十亿美元。据不完全统计，市场上稳定币项目已超过60家（2019年6月）。
 
-Based on the demand for stability, there has been stablecoin represented by Tether, in which market volume has reached billions of dollars. Incomplete statistics show that there are more than 60 stablecoin projects in the market (June 2019).
-
 看到稳定币市场的巨大机会，全球金融和互联网巨头也纷纷布局。2019年2月14日，JP Morgan 宣布推出稳定币——JPM Coin；2019年6月18日，Facebook发布加密货币项目Libra白皮书，联合数十家知名金融机构和在线商户，计划推出基于加密货币的支付系统。
 
-Seeing the huge opportunities in the market, global financial and Internet giants have also entered this market. On February 14, 2019, JP Morgan announced the launch of JPM Coin; on June 18, 2019, Facebook released cryptocurrency project Libra's white paper, joining dozens of well-known financial institutions and internet multinationals, plans to launch a cryptocurrency-based payment system. 
-
 一场席卷全球的货币革命正在发生。
+
+### 1. Background
+
+With the popularity of blockchain technology and cryptocurrency, a new form of currency has emerged. However, due to the fluctuation of the price of cryptocurrency, it cannot be used as a trading medium, cannot be deferred, and cannot be used as the unit of accounting.
+
+Based on the demand for stability, there has been stablecoin represented by Tether, in which market volume has reached billions of dollars. Incomplete statistics show that there are more than 60 stablecoin projects in the market (June 2019).
+
+Seeing the huge opportunities in the market, global financial and Internet giants have also entered this market. On February 14, 2019, JP Morgan announced the launch of JPM Coin; on June 18, 2019, Facebook released cryptocurrency project Libra's white paper, joining dozens of well-known financial institutions and internet multinationals, plans to launch a cryptocurrency-based payment system. 
 
 A currency revolution sweeping the globe is taking place.
 
 ### 2. 问题陈述
-
-### 2. Problems
 
 然而，主流的稳定币项目仍然以中心化或多中心化的方式运营着，我们仍然不得不信任这些机构，同时担忧着不透明，超发等问题。货币的铸造仍然是大资本的特权，垄断仍然是追逐最大利益的手段。
 
@@ -44,15 +42,33 @@ A currency revolution sweeping the globe is taking place.
 
 为了这样的愿景，依托原力协议开源框架，原力协议正式启动稳定币项目——“QIAN”。
 
+### 2. Problems
+
+However, the mainstream stablecoin projects are still operated in a centralized or multi-centered manner, we still have to trust these institutions, while worrying about opaque and over-issued issues. The casting of stablecoin is still the privilege of big capital, and monopoly is still the way to chase maximum interests.
+
+We believe that there must be another way, whether it is an international business giant or a mortal being, as long as it can prove its credit, it can participate in the creation of money equally, freely and conveniently, enjoy undifferentiated and non-discriminatory financial services in an open, inclusive and transparent ecosystem. It reflects the essence and spirit of the blockchain.
+
+In order to achieve such a vision, relying on the open-source framework of The Force Protocol, we officially launched the stablecoin project - "QIAN".
+
 ## 二、QIAN简介
 
 我们首先对钱（QIAN）进行简单介绍，接下来的其他章节将介绍具体实现细节。
+
+## B. Introduction of QIAN
+
+Let's start with a brief introduction to the QIAN, and the next chapters will cover specific implementation details.
 
 ### 1. QIAN的创造依据
 
 从古至今，作为货币的有贝壳、珠子、棍子、金属货币、纸币等。大家使用某种货币，是因为在其上附加了某类人群或全体人类的共识。货币的本质是价值信用，因此我们认为，只要有适当的价值信用工具，人人皆可创造货币。
 
 在区块链世界里，token（暂译为通证）是信用的直接体现。所以，只要拥有较好流动性的加密数字货币或通证化资产（以下统称为“加密资产”），就可以用来为货币的发行做担保，通过一定的价格稳定机制，可以实现对法币的汇率稳定。
+
+### 1. Creation basis of QIAN
+
+Since ancient times, there have been shells, beads, sticks, metal money, banknotes, etc. as currency. Everyone uses a certain currency because it has a consensus on certain groups of people or all human beings. The essence of money is value credit, so we believe that everyone can create money as long as there is a proper value credit tool.
+
+In the blockchain world, token is a direct manifestation of credit. Therefore, the cryptocurrency or crypto-assets with better liquidity can be used as guarantee for the issuance of decentralized stablecoin. Through a certain price stabilization mechanism, the exchange rate stability to fiat currency can be achieved.
 
 ### 2. QIAN的基本要点
 
@@ -62,6 +78,14 @@ A currency revolution sweeping the globe is taking place.
 + QIAN 系统致力最终于实行完全去中心化运作，但这将是一个渐进的过程；   
 + QIAN 系统基于原力协议开源框架开发，是原力协议生态系统的一部分。
 
+### 2. Basic points of QIAN
+
++ QIAN uses crypto-assets as the underlying support assets;    
++ QIAN will initially maintain a 1:1 exchange rate with the US dollar, and will issue a 1:1 exchange rate with the international mainstream currencies such as the Euro, Japanese Yen, RMB and Libra in the future;    
++ The QIAN system is prioritized developing on RSK and Ethereum, and will be upgraded based on the mainstream cross-chain architecture;    
++ The QIAN system is committed to the ultimate decentralized operation, but this will be a gradual process;    
++ The QIAN system is based on the open-source framework of The Force Protocol and is part of The Force Protocol ecosystem.
+
 ### 3. 稳定机制
 
 + 至少 100% 加密资产支持；   
@@ -69,13 +93,28 @@ A currency revolution sweeping the globe is taking place.
 + 精选底层加密资产组合，降低系统性风险；   
 + 动态利息调整机制，维持和调整 QIAN 的发展和稳定。
 
+### 3. Stability mechanism
+
++ At least 100% cryptoasset support;    
++ Stablecoin holders can redeem collateral with market price at any time;    
++ Carefully select the underlying cryptoassets portfolio to reduce systemic risk;    
++ Dynamic interest adjustment mechanism to maintain and adjust QIAN's development and stability.
+
 ### 4. QIAN 系统的两种 token
 
 **QIAN**：同“钱”， QIAN 是原力协议生态的稳定币，可以被创造（`mint`）也可以被销毁（`burn`），可以用于借贷、投资、支付、储值等应用场景。
 
 **FOR**：原力协议生态代币，也是 QIAN 系统治理代币，用于对 QIAN 生态治理投票和维持 QIAN 价格稳定。
 
+### 4. Two tokens in the QIAN system
+
+**QIAN**: Same meaning as “money” in mandarin Chinese, QIAN is a stablecoin of The Force Protocol ecosystem, which can be created (`mint`) or destroyed (`burn`), can be used for lending, investment, payment, value storing and other application scenarios.
+
+**FOR**: The Force Protocol Eco-Token, also governance token of the QIAN system for voting on QIAN ecology governance and maintaining QIAN price stability.
+
 ## 三、质押物管理
+
+## C. Pledge management
 
 ### 1.超额加密资产支持
 
@@ -87,11 +126,27 @@ QIAN 由用户向智能合约质押加密资产生成，初始阶段系统将要
 + 最高铸币量：指该类加密资产在系统中所能铸造QIAN的最大量；   
 + 清算罚金：当质押率低于最低质押率后由系统罚没的质押物比例，通常而言，加密资产的波动率越高，清算罚金越高。
 
+### 1. Excess cryptoasset support
+
+QIAN is generated by the user pledging cryptoasset to the smart contract, at the initial stage, the system will require pledge rate (the pledge value / created QIAN value) to be no less than 120%. The initial underlying assets will be dominated by cryptocurrencies such as BTC and ETH. After a certain period of stable operation, the system will consider incorporating cryptoassets such as offline asset tokens with strong consensus as collateral. Considering the high volatility and high correlation of these token assets, excess assets will be required to be pledged.
+
+For each type of cryptoasset, the core parameters of the system configuration include:
+
++ Minimum pledge rate: Below this pledge rate will trigger the system mandatory clearing process;    
++ Maximum coinage: refers to the maximum amount of QIAN that can be created in the system for specific cryptoassets;    
++ Liquidation fines: The proportion of pledges that are punishable by the system when the specific pledge rate is lower than the minimum pledge rate. Generally speaking, the higher the volatility of the cryptoassets, the higher the liquidation penalty.
+
 ### 2.加密资产组合管理
 
 为了避免 QIAN 的价格波动，分散风险，提升稳定性，QIAN 系统将从主流加密数字货币和 token 化资产中选择质押物，选择的指标包括但不限于：资产类型、市值、流动性、波动率、发行主体、发行地区等。由于 QIAN 是一个去中心化的系统，人人皆可自由参与铸造 QIAN。因此，QIAN 系统的加密资产组合管理是一个弹性较大的组合管理策略，系统并不刻意维持各加密资产在系统中所占的比率。但是，如前文所述，系统将为不同加密资产设置最大铸币量，低波动性的加密资产将拥有更高的最大铸币量。
 
+### 2. Cryptoassets portfolio management
+
+In order to avoid QIAN price fluctuations, diversify risks and improve stability, the QIAN system will select pledges from mainstream cryptocurrency and tokenized assets, including but not limited to: asset type, market value, liquidity, volatility, issuer, issue area, etc. Since QIAN is a decentralized system, everyone is free to participate in casting QIAN. Therefore, the QIAN system's cryptoassets portfolio management has a flexible portfolio management strategy, the system does not deliberately maintain the ratio of each cryptoasset in the system. However, as mentioned earlier, the system will set the maximum coinage for different cryptoassets, the low volatility cryptoassets will have higher maximum coinage.
+
 ## 四、稳定性管理
+
+## D. Administration of stablecoin
 
 ### 1.动态利息调整机制
 
