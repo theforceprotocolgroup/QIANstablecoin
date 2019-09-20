@@ -1,8 +1,14 @@
 # 原力协议稳定币项目——QIAN
 
+# QIAN Stablecoin system, powered by The Force Protocol
+
 ## 一、前言
 
+## A. Introduction
+
 只要有信用，每个人都可以创造货币。
+
+Everyone can create money as long as there is credit.
 
 QIAN旨在搭建一个全球性的，门槛极低的，人人皆可参与创造，人人皆可参与流通的去中心化稳定币生态系统。
 
