@@ -152,6 +152,10 @@ In order to avoid QIAN price fluctuations, diversify risks and improve stability
 
 为了维持 QIAN 生态的发展和稳定，质押加密资产铸造 QIAN 将可能产生利息。利息是调整稳定币供应量的一种机制，利息是双向支付的，这个决策将由自动算法决定。当系统认为 QIAN 系统应该提升系统整理风险承受能力时，利息的支付方向是 QIAN 铸造者支付给系统，支付的利息可以是 FOR 或者 QIAN，利息将全部转换成 FOR，并锁定（lock）；当系统认为 QIAN 系统应该激励铸币者以提升 QIAN 流通量时，利息的支付方向是系统支付给 QIAN 铸造者，支付的利息为解锁出的 FOR 。
 
+### 1. Dynamic interest adjustment mechanism
+
+In order to maintain the development and stability of the QIAN ecosystem, the pledge of cryptoassets to cast QIAN will likely generate interest. Interest is a mechanism for adjusting the supply of stablecoins. Interest could be paid in two ways. This decision will be determined by an automatic algorithm. When the system determines that it needs to improve the system's risk tolerance, the payment direction of interest is paid by the QIAN creators to the system, the interest can be paid in FOR or QIAN, the interest will be converted into FOR, and locked in smart contract; When the QIAN system needs to encourage the mints to increase QIAN liquidity, the interest payment direction will be paid to the QIAN creators by the system, and the interest is paid by the unlocked FOR from smart contract.
+
 ### 2.加密资产可赎回机制
 
 系统将支持QIAN持有者以 1 QIAN = 1 USD 按市场价格赎回等值的加密资产，这是保障 QIAN 价格稳定的主要机制。任何对稳定汇率的偏离，都将会因为套利参与者的存在而使得价格回归。
