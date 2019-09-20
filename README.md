@@ -44,7 +44,7 @@ A currency revolution sweeping the globe is taking place.
 
 ### 2. Problems
 
-However, the mainstream stablecoin projects are still operated in a centralized or multi-centered manner, we still have to trust these institutions, while worrying about opaque and over-issued issues. The casting of stablecoin is still the privilege of big capital, and monopoly is still the way to chase maximum interests.
+However, the mainstream stablecoin projects are still operated in a centralized or multi-centered manner, we still have to trust those institutions, while worrying about opaque and over-issued issues. The casting of stablecoin is still the privilege of big capital, and monopoly is still the way to chase maximum interests.
 
 We believe that there must be another way, whether it is an international business giant or a mortal being, as long as it can prove its credit, it can participate in the generation of money equally, freely and conveniently, enjoy undifferentiated and non-discriminatory financial services in an open, inclusive and transparent ecosystem. It reflects the essence and spirit of the blockchain.
 
