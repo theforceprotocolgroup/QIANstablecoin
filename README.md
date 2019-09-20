@@ -12,17 +12,31 @@ Everyone can create money as long as there is credit.
 
 QIAN旨在搭建一个全球性的，门槛极低的，人人皆可参与创造，人人皆可参与流通的去中心化稳定币生态系统。
 
+QIAN aims to build a global, stable, low-threshold and decentralized stablecoin ecosystem that everyone can participate in.
+
 ### 1. 行业背景
 
-随着区块链技术和加密数字货币的流行，一种全新的货币形式已经出现。但是，由于加密数字货币的巨大波动性，使得其不能作为交易媒介，不具备储藏价值，不能进行延期支付，也不能作为记帐单位。
+### 1. Background
 
-基于对稳定性的需求，出现了以Tether为代表的稳定币，市场规模已达数十亿美元。不完全统计，市场上稳定币项目已超过60家（2019年6月）。
+随着区块链技术和加密数字货币的流行，一种全新的货币形式已经出现。但是，由于加密数字货币的巨大波动性，使得其不能作为交易媒介，不能进行延期支付，也不能作为记帐单位。
 
-看到稳定币市场的巨大机会，全球金融和互联网巨头也纷纷布局。2019年2月14日，JP Morgan 宣布推出稳定币——JPM Coin；2019年5月18日，Facebook发布加密货币项目Libra白皮书，联合数十家知名金融机构和在线商户，计划推出基于加密货币的支付系统。
+With the popularity of blockchain technology and cryptocurrency, a new form of currency has emerged. However, due to the fluctuation of the price of cryptocurrency, it cannot be used as a trading medium, cannot be deferred, and cannot be used as the unit of accounting.
+
+基于对稳定性的需求，出现了以Tether为代表的稳定币，市场规模已达数十亿美元。据不完全统计，市场上稳定币项目已超过60家（2019年6月）。
+
+Based on the demand for stability, there has been stablecoin represented by Tether, in which market volume has reached billions of dollars. Incomplete statistics show that there are more than 60 stablecoin projects in the market (June 2019).
+
+看到稳定币市场的巨大机会，全球金融和互联网巨头也纷纷布局。2019年2月14日，JP Morgan 宣布推出稳定币——JPM Coin；2019年6月18日，Facebook发布加密货币项目Libra白皮书，联合数十家知名金融机构和在线商户，计划推出基于加密货币的支付系统。
+
+Seeing the huge opportunities in the market, global financial and Internet giants have also entered this market. On February 14, 2019, JP Morgan announced the launch of JPM Coin; on June 18, 2019, Facebook released cryptocurrency project Libra's white paper, joining dozens of well-known financial institutions and internet multinationals, plans to launch a cryptocurrency-based payment system. 
 
 一场席卷全球的货币革命正在发生。
 
+A currency revolution sweeping the globe is taking place.
+
 ### 2. 问题陈述
+
+### 2. Problems
 
 然而，主流的稳定币项目仍然以中心化或多中心化的方式运营着，我们仍然不得不信任这些机构，同时担忧着不透明，超发等问题。货币的铸造仍然是大资本的特权，垄断仍然是追逐最大利益的手段。
 
