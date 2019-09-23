@@ -33,4 +33,17 @@ contract authority
     function unsetowner(address who) public auth {
         owners[who] = false;
     }
+    //添加访问控制: 允许 @who 访问 @code 的 @sig 方法
+    function enable(address who, address code, bytes4 sig) public auth {  
+        acl[who][code][sig] = true;
+    }
+
+    function enable(address who, bytes4 sig) public auth {
+        this.enable(who, address(this), sig);
+    }
+    
+    //取消访问控制: 禁止 @who 访问 @code 的 @sig 方法
+    function disable(address who, address code, bytes4 sig) public auth {
+        acl[who][code][sig] = false;
+    }
     
