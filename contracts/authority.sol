@@ -19,3 +19,18 @@ contract authority
     constructor() public {
         owners[msg.sender] = true;
     }
+
+    //重新设置 @other 作为下一个权限管理器.
+    function relink(address other) public auth {
+        next = duckauthority(other);
+    }
+
+    //添加 @who 具有owner权限.
+    function setowner(address who) public auth {    //approve
+        owners[who] = true;
+    }
+    //取消 @who 的owner权限.
+    function unsetowner(address who) public auth {
+        owners[who] = false;
+    }
+    
