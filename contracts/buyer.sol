@@ -21,3 +21,17 @@ contract buyer {
     }
 
     mapping (uint => auctionstate) public auctions;
+
+    /** 拍卖参数 */
+
+    uint256 public inc; // = 1.05E27(5%);  //最小竞拍加/减价数量.
+    uint32  public ttl; // = 3 hours;      //单次竞价有效时间.
+    uint32  public exp; // = 2 days;       //整个拍卖持续时间.
+    uint256 public nonce = 0;              //拍卖 id
+
+    //发起竞拍, 仅能被 @debtor 调用
+    //@cor 拍卖品管理器
+    //@dor 资产管理器,
+    //@per 支付者, 付款人.
+    //@rec 表示购买到的稳定币的接受者, 
+    //@bid 预期要买入的稳定币数量
