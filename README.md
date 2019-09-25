@@ -250,29 +250,35 @@ The FOR holder will be responsible of the final benefit or risk of the entire sy
  
 ## 七、系统架构
 
-**QIAN系统架构图**    
+<div align = center>
+<b>QIAN系统架构图</b>
+
 ![GitHub](https://raw.githubusercontent.com/theforceprotocolgroup/stablecoin/master/Pictures/QIAN%20architecture.png "QIAN, system architecture image")
+</div>
 
 **外部系统**   
-**用户钱包：**用户区块链钱包。   
-**预言机：**提供质押物、稳定币、治理代币市场价格。   
-**交易平台：**提供质押物、稳定币、治理代币相互之间的兑换交易或者拍卖。   
+**用户钱包：** 用户区块链钱包。   
+**预言机：** 提供质押物、稳定币、治理代币市场价格。   
+**交易平台：** 提供质押物、稳定币、治理代币相互之间的兑换交易或者拍卖。   
 
 **内部系统**    
-**质押物管理器：**提供质押物锁定、解锁、质押物参数配置等功能。   
-**稳定币管理器：**提供稳定币生成、销毁等功能。   
-**还款处理器：**处理还款，结清债务。   
-**质押率监控器：**定时计算质押率，触发补仓提醒、强制平仓等。   
-**清算器：**计算债务情况，需要质押品数量等。   
-**质押物处理器：**负责筹集质押物并执行兑换，调用代偿还款等。   
-**治理代币管理器：**提供治理代币锁定、解锁等功能。   
-**治理投票器：**发起或参与社区治理投票，并根据投票结果修改系统参数。   
-**稳定币兑换管理器：**负责将稳定币按 1 QIAN = 1 USD 兑换出等值的质押物。
+**质押物管理器：** 提供质押物锁定、解锁、质押物参数配置等功能。   
+**稳定币管理器：** 提供稳定币生成、销毁等功能。   
+**还款处理器：** 处理还款，结清债务。   
+**质押率监控器：** 定时计算质押率，触发补仓提醒、强制平仓等。   
+**清算器：** 计算债务情况，需要质押品数量等。   
+**质押物处理器：** 负责筹集质押物并执行兑换，调用代偿还款等。   
+**治理代币管理器：** 提供治理代币锁定、解锁等功能。   
+**治理投票器：** 发起或参与社区治理投票，并根据投票结果修改系统参数。   
+**稳定币兑换管理器：** 负责将稳定币按 1 QIAN = 1 USD 兑换出等值的质押物。
 
 ## VII. System architecture
 
-**QIAN system architecture diagram**
-![GitHub](https://raw.githubusercontent.com/theforceprotocolgroup/stablecoin/master/Pictures/QIAN%20architecture.png "QIAN, system architecture image")
+<div align = center>
+<b>QIAN system architecture diagram</b>
+
+![GitHub](https://raw.githubusercontent.com/theforceprotocolgroup/stablecoin/Dev/Pictures/BusinessWorkFlowEN.png "QIAN, system architecture image")
+</div>
 
 **External system**    
 **User Wallet:** User's Blockchain Wallet.    
