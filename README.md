@@ -250,7 +250,7 @@ The FOR holder will be responsible of the final benefit or risk of the entire sy
  
 ## 七、系统架构
 
-**QIAN系统架构图**    
+<div align = center>**QIAN系统架构图**</div>    
 ![GitHub](https://raw.githubusercontent.com/theforceprotocolgroup/stablecoin/master/Pictures/QIAN%20architecture.png "QIAN, system architecture image")
 
 **外部系统**   
@@ -271,7 +271,7 @@ The FOR holder will be responsible of the final benefit or risk of the entire sy
 
 ## VII. System architecture
 
-**QIAN system architecture diagram**
+<div align = center>**QIAN system architecture diagram**</div>
 ![GitHub](https://raw.githubusercontent.com/theforceprotocolgroup/stablecoin/Dev/Pictures/BusinessWorkFlowEN.png "QIAN, system architecture image")
 
 **External system**    
