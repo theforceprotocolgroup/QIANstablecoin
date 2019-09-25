@@ -279,7 +279,7 @@ The FOR holder will be responsible of the final benefit or risk of the entire sy
 <div align = center>
 <b>QIAN system architecture diagram</b>
 
-![GitHub](https://raw.githubusercontent.com/theforceprotocolgroup/stablecoin/Master/Pictures/BusinessWorkFlowEN.png "QIAN, business work flow image")
+![GitHub](https://raw.githubusercontent.com/theforceprotocolgroup/stablecoin/master/Pictures/BusinessWorkFlowEN.png "QIAN, business work flow image")
 </div>
 
 **External system**    
