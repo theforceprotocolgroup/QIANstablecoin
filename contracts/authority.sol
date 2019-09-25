@@ -46,4 +46,23 @@ contract authority
     function disable(address who, address code, bytes4 sig) public auth {
         acl[who][code][sig] = false;
     }
-    
+
+    function disable(address who, bytes4 sig) public auth {
+        this.disable(who, address(this), sig);
+    }
+
+    //验证合约的操作是否被授权.
+    modifier auth {
+        require(accessible(msg.sender, address(this), msg.sig), "access unauthorized");
+        _;
+    }
+
+    function accessible(address who, address code, bytes4 sig) public view returns (bool) {
+         return who == code
+                || owners[who]
+                || acl[who][code][sig]
+                || (next == duckauthority(0)
+                    ? false 
+                    : next.accessible(who, code, sig));
+    }
+}    
