@@ -272,7 +272,7 @@ The FOR holder will be responsible of the final benefit or risk of the entire sy
 ## VII. System architecture
 
 **QIAN system architecture diagram**
-![GitHub](https://raw.githubusercontent.com/theforceprotocolgroup/stablecoin/master/Pictures/QIAN%20architecture.png "QIAN, system architecture image")
+![GitHub](https://raw.githubusercontent.com/theforceprotocolgroup/stablecoin/Dev/Pictures/BusinessWorkFlowEN.png "QIAN, system architecture image")
 
 **External system**    
 **User Wallet:** User's Blockchain Wallet.    
