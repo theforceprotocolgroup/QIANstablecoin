@@ -35,3 +35,14 @@ contract buyer {
     //@per 支付者, 付款人.
     //@rec 表示购买到的稳定币的接受者, 
     //@bid 预期要买入的稳定币数量
+
+    function auction(address cor, address dor, address per, address rec, uint256 bid) public returns (uint id) {
+        id = nonce++;
+        auctions[id].cor = cor;
+        auctions[id].dor = dor;
+        auctions[id].per = per;
+        auctions[id].win = rec;
+        auctions[id].amt = uint256(-1);
+        auctions[id].bid = bid;
+        auctions[id].exp = uint32(now) + exp;
+    }
