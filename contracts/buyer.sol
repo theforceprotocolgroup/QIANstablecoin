@@ -35,6 +35,11 @@ contract buyer {
     //@per 支付者, 付款人.
     //@rec 表示购买到的稳定币的接受者, 
     //@bid 预期要买入的稳定币数量
+<<<<<<< HEAD
+=======
+<<<<<<< Updated upstream
+=======
+>>>>>>> Dev
 
     function auction(address cor, address dor, address per, address rec, uint256 bid) public returns (uint id) {
         id = nonce++;
@@ -46,3 +51,22 @@ contract buyer {
         auctions[id].bid = bid;
         auctions[id].exp = uint32(now) + exp;
     }
+<<<<<<< HEAD
+=======
+
+    //参与竞拍. @id 拍卖id, @amt 竞拍出价, @bid 预期要买入的稳定币数量, 
+    function downward(uint id, uint amt, uint bid) public {
+        auctionstate memory a = auctions[id];
+        require(a.win != address(0));
+        require(a.ttl > now || a.ttl == 0);
+        require(a.exp > now);
+        //要求竞拍必须固定 @bid.
+        require(bid == a.bid);
+        //每次竞拍出价必须低于比上一次出价.
+        require(amt <  a.amt);
+        //检查单次竞拍降价的数量是否满足最小竞拍降价步长.
+        require(inc * amt <= a.amt);
+        //将当前出价者的稳定币转给上一个出价者
+        moveable(a.dor).move(msg.sender, a.win, bid);
+>>>>>>> Stashed changes
+>>>>>>> Dev
