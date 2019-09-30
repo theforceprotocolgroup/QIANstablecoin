@@ -63,4 +63,19 @@ contract buyer {
         require(inc * amt <= a.amt);
         //将当前出价者的稳定币转给上一个出价者
         moveable(a.dor).move(msg.sender, a.win, bid);
->>>>>>> Stashed changes
+
+        //更新当前拍卖记录.
+        auctions[id].win = msg.sender;
+        auctions[id].amt = amt;
+        auctions[id].ttl = uint32(now) + ttl;
+    }
+
+    //拍卖结算
+    function end(uint id) public {
+        auctionstate memory a = auctions[id];
+        require(a.ttl != 0 && (a.ttl < now || a.exp < now));
+        moveable(a.cor).move(a.per, a.win, a.amt);
+        delete auctions[id];
+    }
+}
+
