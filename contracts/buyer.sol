@@ -35,7 +35,6 @@ contract buyer {
     //@per 支付者, 付款人.
     //@rec 表示购买到的稳定币的接受者, 
     //@bid 预期要买入的稳定币数量
-    
     function auction(address cor, address dor, address per, address rec, uint256 bid) public returns (uint id) {
         id = nonce++;
         auctions[id].cor = cor;
@@ -61,7 +60,6 @@ contract buyer {
         require(inc * amt <= a.amt);
         //将当前出价者的稳定币转给上一个出价者
         moveable(a.dor).move(msg.sender, a.win, bid);
-        
         //更新当前拍卖记录.
         auctions[id].win = msg.sender;
         auctions[id].amt = amt;
