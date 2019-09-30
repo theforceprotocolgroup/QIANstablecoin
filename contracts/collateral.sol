@@ -13,3 +13,12 @@ contract duckdebtor {
     function decinterest(uint256 amount) public;
     function incbaddebt(uint256 amount) public;
 }
+
+contract ifixedseller {
+    function auction(address cor, address dor, address per, address who, address rec, uint256 qua, uint256 amt, uint256 bid) public returns(uint256);
+}
+
+contract ifeeder {
+    function get() public view returns (uint256);
+    function valid() public view returns (bool);
+}
