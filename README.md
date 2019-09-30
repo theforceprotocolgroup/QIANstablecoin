@@ -309,3 +309,6 @@ QIAN 系统的代码也将保持全部开源的策略，并会逐步融入原力
 In the early days, QIAN will firstly develop on RSK and Ethereum. In the follow-up, we will migrate the QIAN system to the Force Protocol financial application public blockchain to build a stable currency system that truly supports the pledge of multiple cryptoassets. The Force Protocol financial application public blockchain may partly develop based on Tendermint Core and COSMOS SDK, and has a distributed financial application consensus mechanism originally developed by The Force Protocol team to support asset cross-chain circulation and large-scale distributed financial applications.
 
 The QIAN system code will also maintain a fully open-source strategy and will gradually integrate into the financial open platform of The Force Protocol, becoming part of The Force Protocol financial application development architecture, providing technical service to teams around the world which wish to create a decentralized stablecoin system, eventually create a global open cryptocurrency market.
+
+## 九、项目库目录结构
+
