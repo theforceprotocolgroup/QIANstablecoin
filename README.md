@@ -310,5 +310,194 @@ In the early days, QIAN will firstly develop on RSK and Ethereum. In the follow-
 
 The QIAN system code will also maintain a fully open-source strategy and will gradually integrate into the financial open platform of The Force Protocol, becoming part of The Force Protocol financial application development architecture, providing technical service to teams around the world which wish to create a decentralized stablecoin system, eventually create a global open cryptocurrency market.
 
-## 九、项目库目录结构
+## 九、项目代码库目录结构
 
++ ### script/
+
+    包含稳定币系统中涉及的所有脚本文件, 其中
+        
+     + 部署相关的文件名为 "deploy*"
+     + 编译器 "solcc",
+     + 用于合并多个源代码文件并输出的工具, "solcm",
+     + 修改系统参数的脚本: debtor_tdc, testoken_approve, feeder_set, ctoken_*, ...
+     + 部署导出脚本 "export", 用于导出部署完成后产生的合约地址.
+     + Makefile, 由于Makefile脚本的工作原理, 天然的适合于构建文件间存在依赖关系的场景。这里用于构建模块(合约)间的依赖关系以及bin/abi文件与源码的依赖关系, 比如，`debtor`依赖于 `stablecoin`, `debtor.sol`, 所以当`stablecoin`被重部署后或者`debtor.sol`被修改后, `debtor`也需要被重新部署.
+     + rt 最初的意义是 "runtime", 它是一个为其他所有脚本提供底层支持的工具库. 比如: 提供web3对象, 提供 yargs 参数解析对象, 提供配置文件对象解析, ...
+
++ ### output/
+
+    默认部署输出文件目录.
+
+    每成功部署一个模块(合约), 就会有一个相同的名称的文件产生在这个目录中. 文件内容为被部署的合约的地址.
+
++ ### build/
+
+    默认的abi/bin生成目录.
+
+    每个sol源代码都会对应编译生成一个相应的.bin和相应的.abi文件, 这些文件被存放在这个目录中.
+
++ ### contracts/
+    
+    包含稳定币的所有合约源代码.
+
+    + **approval.sol**：投票合约, 同时也是一个 authority, 被投票的可以是提案或者账户, 投票胜出的地址将有权限修改系统状态.
+    + **arith.sol**：专用数学函数库.
+    + **authority.sol**：系统权限管理合约.
+    + **collateral.sol**：提供抵押物加入和兑换功能的合约
+    + **debtor.sol**：系统债务管理器合约
+    + **ceth.sol**：以ETH作为抵押物的合约, 是 collateral 的派生类.
+    + **feeder.sol**：喂价器合约
+    + **govtoken.sol**：FOR治理代币封装.
+    + **stderc20.sol**：ERC20 标准实现.
+    + **stablecoin.sol**：稳定币token合约, 是 stderc20 的派生合约.
+    + **ctoken.sol**：以ERC20作为抵押物的合约, 是 collateral 的派生合约.
+    + **virtualwallet.sol**：虚拟钱包合约, 暂时考虑是用作拍卖时修改出价人的资产持有状态, 竞拍者需要先充值到虚拟钱包.
+
++ ### web/
+    
+    + **src/** 包含所有前端需要调用的合约方法封装.
+    + **res/** 包含被导出的所有模块部署地址文件(deployed.json)和配置文件等资源.
+    + **abi/** 包含所有模块的abi文件.
+    + **test/** 测试脚本
+
++ ### kovan.js|....js
+
+    配置文件, 适用于"kovan"测试网. 也可以提供其他支持的网络配置文件, 比如 "rinkeby.json" 用于配置rinkeby 测试网.
+
++ ### dtool (deploy tool)
+
+    主部署工具
+    
+    #### 用法
+
+    > dtool <deploy|clean> [--argument | --argument value]
+
+    ##### dtool deploy
+    
+    + 无参数, 根据Makefile判断的结果来部署, 可能一个都不会重新部署, 可能全部重新部署.
+    + --all, [可选] 强制重新部署
+    + --feeder|stablecoin|govtoken|debtor|ethcoll|tokencoll, [可选] 强制重新部署某一个模块及依赖它的模块.
+    + --network kovan|rinkeby|rsk|main|..., [必要] 必须指定网络名
+
+    ##### dtool clean
+
+    + 无参数, 清空所有的abi/bin文件和部署输出文件
+
+    ##### dtool print
+
+    + --feeder|stablecoin|govtoken|debtor|ethcoll|tokencoll [必要] 合并并输出模块的源码(用于上传 etherscan.io)
+
+    ##### dtool get
+    
+    + --feeder|stablecoin|govtoken|debtor|ethcoll|tokencoll [必要] 输出模块的部署地址.
+
+    ##### dtool exec
+    
+    + --network kovan|rinkeby|rsk|main, [必要] 必须指定网络名
+    + --script-name [arguments...], [必要] 代为执行脚本, 例如 
+    
+    > dtool exec --network kovan feeder_set -t TES
+
+    等同于执行
+    
+    > export RT_PRIK="0X..." && feeder_set -t TES -c kovan.js
+    
+    或者
+    
+    > export RT_PRIK="0x..." && export RT_CONF="kovan.js" && feeder_set -t TES
+
+## IX. Repositories structure
+
++ ### script/
+
+    Contains all the script files involved in The Force Protocol stablecoin system, in which
+        
+     + The deployment-related file name is "deploy*"
+     + Compiler "solcc",
+     + Tool for merging multiple source files then outputting, "solcm",
+     + Scripts for modifing system parameters: debtor_tdc, testoken_approve, feeder_set, ctoken_*, ...
+     + Export script "export", responsible for exporting the contract address generated after the deployment is completed.
+     + Makefile, the working principle of the Makefile script is naturally suitable for the scenario where there is a dependency between the files. In this project, the Makefile is used to build the dependencies between the modules (contracts) and the dependencies between the bin/abi files and the source code. For example, `debtor` depends on `stablecoin`, `debtor.sol`, so when `stablecoin` is redeployed or `debtor.sol` is modified, `debtor` also needs to be redeployed.
+     + rt, the original meaning of rt is "runtime", which is a tool library that provides underlying support for all other scripts. For example: provides web3 objects, provides yargs parameter parsing objects, provides configuration file object parsing, etc.
+
++ ### output/
+
+    The default deployment output file directory.
+
+    Every time a module (contract) is successfully deployed, a file with the same name will be generated in this directory. The file content is the address of the contract being deployed.
+
++ ### build/
+
+    The default abi/bin build directory.
+
+    Each sol source code will be compiled to generate a corresponding .bin and corresponding .abi files, which are stored in this directory.
+
++ ### contracts/
+    
+    Contains all contract source code for The Force Protocol stablecoin.
+
+    + **approval.sol:** the voting contract, which is also an authority, voting target can be a proposal or an account. Address which wins the vote will have the authority to modify the system state.
+    + **arith.sol:** special math function library.
+    + **authority.sol:** system permissions management contract.
+    + **collateral.sol:** contract provides function for listing and redeeming of collaterals.
+    + **debtor.sol:** debt manager contract.
+    + **ceth.sol:** the contract with ETH as collateral, is a derived class of collateral.sol.
+    + **feeder.sol:** price feeder contract.
+    + **govtoken.sol:** FOR governing token packaging.
+    + **stderc20.sol:** ERC20 standard implementation.
+    + **stablecoin.sol:** stablecoin token contract, is a derivative contract of stderc20.sol.
+    + **ctoken.sol:** the contract with ERC20 as collateral, is a derivative contract of collateral.sol.
+    + **virtualwallet.sol:** virtual wallet contract, temporarily considered to be used to modify the bidder's asset holding status at auction, the bidder needs to first recharge to the virtual wallet.
+
++ ### web/
+
+    + **src/** Contains contract method wrappers that all front ends need to call.
+    + **res/** Contains resources such as all module deployment address files (deployed.json) and configuration files that are exported.
+    + **abi/** Contains abi files for all modules.
+    + **test/** Test script.
+
++ ### kovan.js|....js
+
+    Configuration file for "kovan" test network. Other supported network configuration files are also available, such as "rinkeby.json" for configuring the rinkeby test network.
+
++ ### dtool (deploy tool)
+
+    Main deployment tool
+    
+    #### Usage
+
+    > dtool <deploy|clean> [--argument | --argument value]
+
+    ##### dtool deploy
+    
+    + With no parameters, deployed according to the results of the Makefile decision, may not be redeployed, or may be completely redeployed.
+    + --all, [optional] forced redeployment
+    + --feeder|stablecoin|govtoken|debtor|ethcoll|tokencoll, [optional] forced redeployment of a module and modules that depend on it.
+    + --network kovan|rinkeby|rsk|main|..., [required] the network name must be specified.
+
+    ##### dtool clean
+
+    + With no parameters, clear all abi/bin files and deploy output files.
+
+    ##### dtool print
+
+    + --feeder|stablecoin|govtoken|debtor|ethcoll|tokencoll [required] merge and output the source code of the module (for upload to etherscan.io)
+
+    ##### dtool get
+    
+    + --feeder|stablecoin|govtoken|debtor|ethcoll|tokencoll [required] the deployment address of the output module.
+
+    ##### dtool exec
+    
+    + --network kovan|rinkeby|rsk|main, [required] the network name must be specified.
+    + --script-name [arguments...], [required] a proxy to execute the script, for example: 
+    
+    > dtool exec --network kovan feeder_set -t TES
+
+    Equals to execute
+    
+    > export RT_PRIK="0X..." && feeder_set -t TES -c kovan.js
+    
+    Or
+    
+    > export RT_PRIK="0x..." && export RT_CONF="kovan.js" && feeder_set -t TES

@@ -22,3 +22,19 @@ contract ifeeder {
     function get() public view returns (uint256);
     function valid() public view returns (bool);
 }
+
+contract collateral is authority, arith {
+    /** 抵押物与稳定币持有状态 */
+
+    struct hstate {
+        uint256 c; //exchanged-collateral,   已兑换成稳定币的抵押物数量, 应该满足最小抵押率(ove)
+        uint256 s; //exchanged-stablecoin,   已兑换的稳定币的数量.
+    }
+
+    mapping (address => hstate) public hol;    //以账户为单位记录持有状态(hold state)
+    uint256 public tot;                        //抵押物产生的稳定币总量(total)
+    uint256 public rat;                        //利率(rate)
+    uint256 public lrt;                        //最后rise时间(last rise time), rise 计算一段时间内产生的利息并累计到债务管理器
+    uint256 public exr;                        //兑换比率, 基于ove计算(exchange rate)
+
+    /** 风险参数 */
