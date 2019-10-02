@@ -22,4 +22,10 @@ rt.async_raiilock(async function() {
         
         const ctokenaddress = deployedctoken && deployedctoken[token];
         rt.assert(ctokenaddress, `not find ctoken(${token})`);
-        
+
+        rt.log(`ctoken(${token}).methods.feed()`);
+
+        let ctoken = await rt.rt_contract_at("ctoken", ctokenaddress);
+        const tx = ctoken.methods.feed();
+        await rt.send(tx, ctokenaddress);
+    });
