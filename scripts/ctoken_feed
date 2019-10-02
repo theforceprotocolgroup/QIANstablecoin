@@ -15,4 +15,11 @@ rt.async_raiilock(async function() {
         const token = argv.token;
     
         rt.assert(token, "missing option: --token | -t");
+
+        const deployedctoken = rt.get("ctoken")
+        rt.log(`get ctoken:`, 
+            JSON.stringify(deployedctoken, null, 4));
+        
+        const ctokenaddress = deployedctoken && deployedctoken[token];
+        rt.assert(ctokenaddress, `not find ctoken(${token})`);
         
