@@ -14,3 +14,7 @@ const argv = rt.yargs()
 rt.async_raiilock(async function() {
     const token = argv.token;
     rt.assert(token, "missing option: --token | -t");
+
+    const deployedctoken = rt.get("ctoken");
+    rt.log("get ctoken:", JSON.stringify(deployedctoken, null, 4));
+   
