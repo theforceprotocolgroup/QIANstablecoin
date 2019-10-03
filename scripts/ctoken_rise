@@ -20,4 +20,11 @@ rt.async_raiilock(async function() {
 
     const ctokenaddress = deployedctoken && deployedctoken[token];
     rt.assert(ctokenaddress, `undeployed ctoken(${token})`);
+
+    rt.log(`ctoken(${token}).methods.rise()`);
+
+    let ctoken = await rt.rt_contract_at("ctoken", ctokenaddress);
+    const tx = ctoken.methods.rise();
+    await rt.send(tx, ctokenaddress);
+});
    
