@@ -10,3 +10,10 @@ const argv = rt.yargs()
         type: 'string'
     })
     .argv;
+
+rt.async_raiilock(async function() {
+
+    const token = argv.token;
+
+    rt.assert(token, "missing option: --token | -t");
+    
