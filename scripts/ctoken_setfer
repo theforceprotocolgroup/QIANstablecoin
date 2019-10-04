@@ -1,0 +1,12 @@
+#!/usr/bin/env node
+
+const rt = require("./rt");
+
+//token: USDT, DAI, TES, ...
+const argv = rt.yargs()
+    .options('token', {
+        alias: 't',
+        describe: 'The symbol of the token collateral',
+        type: 'string'
+    })
+    .argv;
