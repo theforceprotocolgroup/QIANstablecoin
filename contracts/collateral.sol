@@ -46,3 +46,15 @@ contract collateral is authority, arith {
     uint256 public seg;        //单次清算数量(segmentation).
     uint256 public fin;        //清算罚金(fine)
     ifeeder public fer;        //喂价器
+
+    /** 清算拍卖 */
+
+    ifixedseller public ser; 
+
+    /** 债务管理 */
+
+    idebtor public dor;      //债务管理器
+
+    /** 合约运行状态 */
+
+    bool public wel;          //合约是否禁止数据流动
