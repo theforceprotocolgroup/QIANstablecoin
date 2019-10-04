@@ -38,3 +38,11 @@ contract collateral is authority, arith {
     uint256 public exr;                        //兑换比率, 基于ove计算(exchange rate)
 
     /** 风险参数 */
+
+    uint256 public upp;        //允许抵押物产生的稳定币总量上限(upper)
+    uint256 public low;        //允许抵押物产生的稳定币总量下限(lower)
+    uint256 public ove;        //最小抵押率(overflow)
+    uint256 public gth;        //利率增长量(growth)
+    uint256 public seg;        //单次清算数量(segmentation).
+    uint256 public fin;        //清算罚金(fine)
+    ifeeder public fer;        //喂价器
