@@ -76,3 +76,31 @@ contract collateral is authority, arith {
         lrt = now;
         rat = PRE;
     }
+
+    /** 治理 */
+
+    function setlow(uint256 v) public auth {
+        low = v;
+    }
+    function setupp(uint256 v) public auth {
+        upp = v;
+    }
+    function setove(uint256 v) public auth {
+        ove = v;
+    }
+    function setgth(uint256 v) public auth {
+        gth = v;
+    }
+    function setseg(uint256 v) public auth {
+        seg = v;
+    }
+    function setfin(uint256 v) public auth {
+        fin = v;
+    }
+
+    function setfer(address v) public auth {
+        fer = ifeeder(v);
+    }
+    function setser(address v) public auth {
+        ser = ifixedseller(v);
+    }
