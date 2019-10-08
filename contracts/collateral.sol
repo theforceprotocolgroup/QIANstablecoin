@@ -67,3 +67,12 @@ contract collateral is authority, arith {
     event Burn(address indexed who, uint256 amount);
     event Deposit(address indexed who, uint256 amount);
     event Withdraw(address indexed who, uint256 amount);
+
+    /** 初始化 */
+
+    constructor(address d) public {
+        dor = idebtor(d);
+        wel = true;
+        lrt = now;
+        rat = PRE;
+    }
