@@ -58,3 +58,12 @@ contract collateral is authority, arith {
     /** 合约运行状态 */
 
     bool public wel;          //合约是否禁止数据流动
+
+    /** 事件通知 */
+
+    event Feed(uint256 val, uint256 exr);
+    event Notfeed(address who);
+    event Mint(address indexed who, uint256 amount);
+    event Burn(address indexed who, uint256 amount);
+    event Deposit(address indexed who, uint256 amount);
+    event Withdraw(address indexed who, uint256 amount);
