@@ -24,3 +24,8 @@ contract arith {
         require(x >= y);
         z = x - y;
     }
+
+    function uadd(uint256 x, uint256 y) internal pure returns (uint256 z) {
+        z = x + y;
+        require (z >= x);
+    }
