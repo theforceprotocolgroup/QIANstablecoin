@@ -304,4 +304,9 @@ contract collateral is authority, arith {
     function ppc() public view returns(uint256) {
         return fer.get();
     }
+
+    //获取 @who 在系统中最少需要存在的抵押物数量(min locked amount)
+    function mla(address who) public view returns(uint256) {
+        return hol[who].s * rat * ove / fer.get();
+    }
    
