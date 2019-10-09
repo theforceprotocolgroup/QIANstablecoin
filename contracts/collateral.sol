@@ -274,4 +274,12 @@ contract collateral is authority, arith {
         //将待清算的抵押物转给清算器
         //TODO: 是不是应该将被清算的抵押物转给 @viraualwallet 或者其它什么管理器?
         hol[address(ser)].c = uadd(hol[address(ser)].c, c);
+        
+        //增加系统坏账记录, 在清算回稳定币之前属于一笔无抵押物对应的坏账.
+        //并且此时用户持有的稳定币(@debtor.hol[who])数量没有变化, 
+        //但是被清算的抵押物和对应的稳定币将以系统坏账的形式存在;
+        dor.incbaddebt(d);
+        //collateral => stablecoin
+        ser.auction(address(this), address(dor), address(ser), who, address(dor), c, umul(d, fin), 0);
+    }
    
