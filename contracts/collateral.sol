@@ -126,3 +126,7 @@ contract collateral is authority, arith {
         exr = (val * PRE * PRE9) / ove;  //[10^27]
         emit Feed(val, exr);
     }
+
+    /** 抵押/赎回 */
+    
+    //赎回(稳定币=>抵押物)
