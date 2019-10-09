@@ -309,4 +309,9 @@ contract collateral is authority, arith {
     function mla(address who) public view returns(uint256) {
         return hol[who].s * rat * ove / fer.get();
     }
-   
+
+    //获取最大可兑换数量
+    function mea(address who) public view returns(uint256) {
+        return hol[who].s * fer.get() / ove;
+    }
+}
