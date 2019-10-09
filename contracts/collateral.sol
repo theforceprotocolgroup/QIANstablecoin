@@ -162,3 +162,9 @@ contract collateral is authority, arith {
         require(umul(hol[u].s, rat) >= low);
         //检查剩余的抵押物和稳定币之间的兑换比, 必须保持大于等于exr.
         require(umul(hol[u].s, rat) <= (umul(hol[u].c, exr) / PRE9));
+
+        uint256 amount = umul(snt, rat);
+        //给 @msg.sender 销毁 @snt * @rat 数量的稳定币.
+        dor.burn(msg.sender, amount);
+        emit Burn(msg.sender, amount);
+    }
