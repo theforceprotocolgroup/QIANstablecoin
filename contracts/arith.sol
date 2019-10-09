@@ -29,3 +29,8 @@ contract arith {
         z = x + y;
         require (z >= x);
     }
+
+    function diff(uint256 x, uint256 y) internal pure returns (int z) {
+        z = int(x) - int(y);
+        require(int(x) >= 0 && int(y) >= 0);
+    }
