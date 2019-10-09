@@ -104,3 +104,13 @@ contract collateral is authority, arith {
     function setser(address v) public auth {
         ser = ifixedseller(v);
     }
+
+    /** 系统运行开关 */
+
+    function stop() public auth {
+        wel = false;
+    }
+
+    function start() public auth {
+        wel = true;
+    }
