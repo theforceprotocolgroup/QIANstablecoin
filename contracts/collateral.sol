@@ -282,4 +282,10 @@ contract collateral is authority, arith {
         //collateral => stablecoin
         ser.auction(address(this), address(dor), address(ser), who, address(dor), c, umul(d, fin), 0);
     }
+
+    //仅允许被清算器调用.
+    function move(address from, address to, uint256 c) public auth {
+        hol[from].c = usub(hol[from].c, c);
+        hol[to].c = uadd(hol[to].c, c);
+    }
    
