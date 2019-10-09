@@ -7,3 +7,9 @@ contract arith {
     function min(uint256 x, uint256 y) internal pure returns(uint256 z) {
         z = (x <= y ? x : y);
     }
+
+    function umul(uint256 x, uint256 y) internal pure returns (uint256 z) {
+        z = x * y;
+        require(y == 0 || z / y == x);
+        z = z / PRE;
+    }
