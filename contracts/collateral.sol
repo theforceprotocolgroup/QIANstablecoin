@@ -270,4 +270,8 @@ contract collateral is authority, arith {
         hol[who].s = usub(hol[who].s, s);
         //从总的稳定币数量中去掉待拍卖的抵押物对应的稳定币记录.
         tot = usub(tot, s);
-  
+        
+        //将待清算的抵押物转给清算器
+        //TODO: 是不是应该将被清算的抵押物转给 @viraualwallet 或者其它什么管理器?
+        hol[address(ser)].c = uadd(hol[address(ser)].c, c);
+   
