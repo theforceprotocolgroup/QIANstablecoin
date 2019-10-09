@@ -34,3 +34,10 @@ contract arith {
         z = int(x) - int(y);
         require(int(x) >= 0 && int(y) >= 0);
     }
+
+    /** 系统内部精度 */
+    uint256 constant public PRE9 = 10 ** 9;
+    uint256 constant public PRE18 = 10 ** 18;
+    uint256 constant public PRE27 = 10 ** 27;
+    uint256 constant public PRE = PRE18;
+}
