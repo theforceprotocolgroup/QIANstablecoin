@@ -259,4 +259,9 @@ contract collateral is authority, arith {
         require(wel);
         hstate memory h = hol[who];
         require((umul(h.c, exr) / PRE9) < umul(h.s, rat));
+        //计算待清算抵押物的数量, MIN(持有的抵押物数量, 单次清算数量)
+        uint256 c = min(h.c, seg);
+        //计算待清算的抵押物对应的稳定币数量, MIN(持有的稳定币数量, 稳定币数量 * 清算的抵押物数量 / 持有的抵押物数量)
+        uint256 s = min(h.s, udiv(umul(h.s, c), h.c));
+        uint256 d = umul(s, rat);
   
