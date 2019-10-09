@@ -192,3 +192,8 @@ contract collateral is authority, arith {
         //检查剩余的抵押物和稳定币之间的兑换比, 必须保持大于等于exr.
         require(umul(hol[u].s, rat) <= (umul(hol[u].c, exr) / PRE9), "bad exchange ratio");
         
+        uint256 amount = umul(snt, rat);
+        //给 @msg.sender 增发 @snt * @rat数量的稳定币(意味着从当前时刻开始计息)
+        dor.mint(msg.sender, amount);
+        emit Mint(msg.sender, amount);
+    }
