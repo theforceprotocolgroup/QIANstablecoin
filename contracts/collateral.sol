@@ -236,4 +236,10 @@ contract collateral is authority, arith {
         //@gth 是被扩大了 @PRE(10 ** 18) 的值, 如果直接计算 @gth ** (now - lrt) 结果会超级巨大.
         //但是如果先除以 @PRE(10 ** 18), 又可能会出现结果被抹成0的情况(0.XXXX...)
         //所以这里使用专用的 @pow 算法.
+        uint256 crat = umul(rat, pow(gth, (now - lrt)));
+
+        int256 b = diff(crat, rat);
+        int256 c = int256(tot);
+        int256 i = c * b;
+        require(b == 0 || i / b == c);
  
