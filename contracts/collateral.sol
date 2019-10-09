@@ -213,3 +213,11 @@ contract collateral is authority, arith {
     //r1 = ln(r0 + 1), r1 表示按年计息的连续复利收益率(对数收益率). 
     //r2 = r1 / (60 * 60 * 24 * 365), r2 表示按秒计息的连续复利收益率
 
+    //https://wiki.mbalib.com/wiki/%E8%BF%9E%E7%BB%AD%E5%A4%8D%E5%88%A9
+    //F = P * e ^ (r2 * t), 连续复利计算公式, 其中:
+    //  P0 是初始值, 
+    //  e 是自然对数,
+    //  r2 是按秒计息的连续复利收益率,
+    //  t 是计息周期(秒数),
+    //  F 是终值. 
+ 
