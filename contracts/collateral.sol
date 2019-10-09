@@ -252,4 +252,11 @@ contract collateral is authority, arith {
         lrt = now;
     }
 
- 
+    /** 抵押物清算 */
+
+    //对 @who 发起清算, 减少 @who 的债务同时并拍卖相应的抵押物.
+    function liquidate(address who) public {
+        require(wel);
+        hstate memory h = hol[who];
+        require((umul(h.c, exr) / PRE9) < umul(h.s, rat));
+  
