@@ -180,3 +180,15 @@ contract collateral is authority, arith {
         require(wel, "system has been stopped");
         require(rat != 0, "bat @rat: rat == 0");
 
+        //增加抵押物持有记录
+        hol[u].c = uadd(hol[u].c, cnt);
+        //增加相应的稳定币记录
+        hol[u].s = uadd(hol[u].s, snt);
+        //增加该类型抵押物对应的稳定币总量
+        tot = uadd(tot, snt);
+        //检查当前生成的稳定币总量上限和下限
+        require(umul(tot, rat) <= upp
+            && umul(hol[u].s, rat) >= low, "out of exchange ceiling");
+        //检查剩余的抵押物和稳定币之间的兑换比, 必须保持大于等于exr.
+        require(umul(hol[u].s, rat) <= (umul(hol[u].c, exr) / PRE9), "bad exchange ratio");
+        
