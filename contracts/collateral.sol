@@ -227,4 +227,13 @@ contract collateral is authority, arith {
     //所以 F = P * e ^ (r2 * t) 
     //    F = P * (e^r2)^t
     //    F = P * gth ^ t
+
+    //其中P表示当前利率(rat), F表示新利率(rat * gth ^ t), F - P 表示的是以r2复合增长t秒后的利率增长(可能是负值, 视配置而定), 
+    //所以最新的利率为 rat += (F - P)
+
+    function rise() public {
+        require(wel);
+        //@gth 是被扩大了 @PRE(10 ** 18) 的值, 如果直接计算 @gth ** (now - lrt) 结果会超级巨大.
+        //但是如果先除以 @PRE(10 ** 18), 又可能会出现结果被抹成0的情况(0.XXXX...)
+        //所以这里使用专用的 @pow 算法.
  
