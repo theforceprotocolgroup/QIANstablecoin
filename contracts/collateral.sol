@@ -114,3 +114,15 @@ contract collateral is authority, arith {
     function start() public auth {
         wel = true;
     }
+
+    /** 喂价 */
+
+    function feed() public {
+        uint256 val = fer.get();
+        //抵押物价格(val): 1 USD
+        //最小抵押率(ove): 150%
+        //兑换比(exr): val/ove = 1/1.5, 表示1.5个抵押物才兑换1个Dai, 或者说1个抵押物大约能兑换 0.6666666666666666... 个 Dai
+        //乘以PRE(10 ** 18)是防止0.6666...被抹成0
+        exr = (val * PRE * PRE9) / ove;  //[10^27]
+        emit Feed(val, exr);
+    }
