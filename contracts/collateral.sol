@@ -299,4 +299,9 @@ contract collateral is authority, arith {
         uint256 price = fer.get();
         return udiv(umul(hol[who].c, price), umul(hol[who].s, rat));
     }
+
+    // 获取抵押物的当前喂价(Price(USD) per collateral)
+    function ppc() public view returns(uint256) {
+        return fer.get();
+    }
    
