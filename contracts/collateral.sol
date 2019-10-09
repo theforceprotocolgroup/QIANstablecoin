@@ -168,3 +168,15 @@ contract collateral is authority, arith {
         dor.burn(msg.sender, amount);
         emit Burn(msg.sender, amount);
     }
+
+    //抵押(抵押物=>稳定币), 使用 @cnt (collateralamount) 数量的抵押物来兑换 @snt (stablecoinamount) 数量的稳定币.
+    //给定抵押物数量 @cnt, 最大的稳定币兑换数量为 @snt = @cnt * @exr / @rat 或者 @snt = (@cnt * @price) / (@rat * @ove)
+    //其中@cnt * @exr 或者 (@cnt * @price) / @ove 是在不考虑利息的情况下可兑换的最大数量, 但是实际上的最大可兑换数量还要考虑利息, 所以 / @rat.
+    //例如要兑换10个稳定币, 那 @snt 不是 10, 而是 10 / rat.
+
+    function exchangeto(uint256 cnt, uint256 snt) public {
+        address u = msg.sender;
+
+        require(wel, "system has been stopped");
+        require(rat != 0, "bat @rat: rat == 0");
+
