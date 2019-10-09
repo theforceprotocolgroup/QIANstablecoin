@@ -197,3 +197,19 @@ contract collateral is authority, arith {
         dor.mint(msg.sender, amount);
         emit Mint(msg.sender, amount);
     }
+
+    /** 更新利率 */
+
+    //累加一段时间内的利率
+
+    //https://wiki.mbalib.com/wiki/%E5%90%8D%E4%B9%89%E5%88%A9%E7%8E%87
+    //https://wiki.mbalib.com/wiki/%E6%9C%89%E6%95%88%E5%B9%B4%E5%88%A9%E7%8E%87
+    //r0 = (1+(r/n))^n − 1, 有效年利率计算公式, r表示名义利率, n表示复利期数(年复利时n=1).
+
+    //https://wiki.mbalib.com/wiki/%E6%9C%89%E6%95%88%E5%B9%B4%E5%88%A9%E7%8E%87
+    //r0 = 2.5%, 设名义年利率为2.5%, 则 r0 表示按年计息的复利率(有效年利率).
+
+    //https://wiki.mbalib.com/wiki/%E8%BF%9E%E7%BB%AD%E5%A4%8D%E5%88%A9%E6%94%B6%E7%9B%8A%E7%8E%87
+    //r1 = ln(r0 + 1), r1 表示按年计息的连续复利收益率(对数收益率). 
+    //r2 = r1 / (60 * 60 * 24 * 365), r2 表示按秒计息的连续复利收益率
+
