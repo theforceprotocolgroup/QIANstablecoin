@@ -288,4 +288,15 @@ contract collateral is authority, arith {
         hol[from].c = usub(hol[from].c, c);
         hol[to].c = uadd(hol[to].c, c);
     }
+
+    //获取用户 @who 由当前抵押物中产生的负债(稳定币总量 + 利息)
+    function debt(address who) public view returns(uint256) {
+        return umul(hol[who].s, rat);
+    }
+    
+    // 获取账户 @who 当前的抵押率, 当没有持有稳定币时, 会由于 /0 引发EVM执行失败.
+    function exchangeratio(address who) public view returns (uint256) {
+        uint256 price = fer.get();
+        return udiv(umul(hol[who].c, price), umul(hol[who].s, rat));
+    }
    
