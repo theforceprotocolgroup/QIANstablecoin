@@ -264,4 +264,10 @@ contract collateral is authority, arith {
         //计算待清算的抵押物对应的稳定币数量, MIN(持有的稳定币数量, 稳定币数量 * 清算的抵押物数量 / 持有的抵押物数量)
         uint256 s = min(h.s, udiv(umul(h.s, c), h.c));
         uint256 d = umul(s, rat);
+        //从 @who 的持有数量中去掉待清算的抵押物记录.
+        hol[who].c = usub(hol[who].c, c);
+        //从 @who 的持有数量中去掉待拍卖的抵押物对应的稳定币记录.
+        hol[who].s = usub(hol[who].s, s);
+        //从总的稳定币数量中去掉待拍卖的抵押物对应的稳定币记录.
+        tot = usub(tot, s);
   
