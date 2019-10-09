@@ -242,4 +242,14 @@ contract collateral is authority, arith {
         int256 c = int256(tot);
         int256 i = c * b;
         require(b == 0 || i / b == c);
+        
+        i < 0 ? dor.decinterest(uint256(i * -1) / PRE)
+            : dor.incinterest(uint256(i) / PRE);
+
+        rat = b < 0 ? usub(rat, uint256(b * -1)) 
+            : uadd(rat, uint256(b));
+
+        lrt = now;
+    }
+
  
