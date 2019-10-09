@@ -19,3 +19,8 @@ contract arith {
         require(x == 0 || z / x == PRE);
         z = z / y;
     }
+
+    function usub(uint256 x, uint256 y) internal pure returns (uint256 z) {
+        require(x >= y);
+        z = x - y;
+    }
