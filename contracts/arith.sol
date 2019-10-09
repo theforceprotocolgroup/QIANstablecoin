@@ -13,3 +13,9 @@ contract arith {
         require(y == 0 || z / y == x);
         z = z / PRE;
     }
+
+    function udiv(uint256 x, uint256 y) internal pure returns (uint256 z) {
+        z = x * PRE;
+        require(x == 0 || z / x == PRE);
+        z = z / y;
+    }
