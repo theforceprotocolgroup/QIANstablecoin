@@ -138,3 +138,11 @@ contract collateral is authority, arith {
     //2. 仅取走抵押物, 仅为用户减少 @cnt 的抵押物持有数量(hol[u].c - @cnt), 不减少稳定币的数量(@snt为0, 即 hol[u].s 不变).
     //  相当于降低了质押率, 但剩余的抵押物数量最少要满足未还债务的最小抵押率.
     //
+    //后续需要区分 @hol[u].c 中有多少是属于稳定币对应的抵押物和多少没有稳定币对应的抵押物, 算法为:
+    //计算稳定币对应的抵押物数量(amount): 
+    //  hol[u].s * rat = amount * exr;
+    //  amount = hol[u].s * rat / exr;
+    //  amount = hol[u].s * rat / (price / ove)
+    //  amount = hol[u].s * rat * ove / price;
+    //计算没有稳定币对应的抵押物数量: 
+    //  hol[u].c - amount;
