@@ -106,7 +106,7 @@ In the blockchain world, token is a direct manifestation of credit. Therefore, t
 + Stablecoin holders can redeem collateral with market price at any time;    
 + Carefully select the underlying cryptoassets portfolio to reduce systemic risk;    
 + Dynamic interest adjustment mechanism to maintain and adjust QIAN's development and stability.
-+ Risk mitigation fund mechanism.
++ Emergency Risk Fund.
 
 ### 4. Two tokens in the QIAN system
 
