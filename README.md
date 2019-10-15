@@ -74,6 +74,7 @@ In order to achieve such a vision, relying on the open-source framework of The F
 + 稳定币持有者随时可以按市场价格赎回质押品；   
 + 精选底层加密资产组合，降低系统性风险；   
 + 动态利息调整机制，维持和调整 QIAN 的发展和稳定。
++ 风险缓释金机制。
 
 ### 4. QIAN 系统的两种 token
 
@@ -105,6 +106,7 @@ In the blockchain world, token is a direct manifestation of credit. Therefore, t
 + Stablecoin holders can redeem collateral with market price at any time;    
 + Carefully select the underlying cryptoassets portfolio to reduce systemic risk;    
 + Dynamic interest adjustment mechanism to maintain and adjust QIAN's development and stability.
++ Risk mitigation mechanism.
 
 ### 4. Two tokens in the QIAN system
 
