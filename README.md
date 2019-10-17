@@ -62,10 +62,10 @@ In order to achieve such a vision, relying on the open-source framework of The F
 
 ### 2. QIAN的基本要点
 
-+ QIAN 以加密资产为底层支持资产；   
-+ QIAN 在初始将与美元保持 1:1 的汇率，未来将可能发行与欧元、日元、人民币、Libra等国际主流货币 1:1 汇率的版本；   
-+ QIAN 系统优先在 RSK 和以太坊上实现，后续将基于主流跨链架构进行升级；   
-+ QIAN 系统致力最终于实行完全去中心化运作，但这将是一个渐进的过程；   
++ QIAN 以加密资产为底层支持资产；
++ QIAN 在初始将与美元保持 1:1 的汇率，未来将可能发行与欧元、日元、人民币、Libra等国际主流货币 1:1 汇率的版本；
++ QIAN 系统优先在比特币 RSK 侧链和以太坊上实现，后续将基于主流跨链架构进行升级；
++ QIAN 系统致力最终于实行完全去中心化运作，但这将是一个渐进的过程；
 + QIAN 系统基于原力协议开源框架开发，是原力协议生态系统的一部分。
 
 ### 3. 稳定机制
@@ -94,10 +94,10 @@ In the blockchain world, token is a direct manifestation of credit. Therefore, t
 
 ### 2. Basic points of QIAN
 
-+ QIAN uses crypto-assets as the underlying support assets;    
-+ QIAN will initially maintain a 1:1 exchange rate with the US dollar, and will issue a 1:1 exchange rate with the international mainstream currencies such as the Euro, Japanese Yen, RMB and Libra in the future;    
-+ The QIAN system is prioritized developing on RSK and Ethereum, and will be upgraded based on the mainstream cross-chain architecture;    
-+ The QIAN system is committed to the ultimate decentralized operation, but this will be a gradual process;    
++ QIAN uses crypto-assets as the underlying support assets;
++ QIAN will initially maintain a 1:1 exchange rate with the US dollar, and will issue a 1:1 exchange rate with the international mainstream currencies such as the Euro, Japanese Yen, RMB and Libra in the future;
++ The QIAN system is prioritized developing on Bitcoin RSK sidechain and Ethereum, and will be upgraded based on the mainstream cross-chain architecture;
++ The QIAN system is committed to the ultimate decentralized operation, but this will be a gradual process;
 + The QIAN system is based on the open-source framework of The Force Protocol and is part of The Force Protocol ecosystem.
 
 ### 3. Stability mechanism
@@ -110,7 +110,7 @@ In the blockchain world, token is a direct manifestation of credit. Therefore, t
 
 ### 4. Two tokens in the QIAN system
 
-**QIAN**: Same meaning as “money” in mandarin Chinese, QIAN is a stablecoin of The Force Protocol ecosystem, which can be generated (`mint`) or destroyed (`burn`), can be used for lending, investment, payment, value storing and other application scenarios.
+**QIAN**: Same meaning as “money” in mandarin Chinese, also in I Ching (the Book of Changes), “the QIAN Diagram” stands for the sky and represents the law of the operation of all things in the universe. It is the highest positive spirit and energy. Following the two important meaning, we named the first stablecoin in Bitcoin ecosystem as QIAN. QIAN is a stablecoin created by The Force Protocol project development team, cycling on Bitcoin RSK sidechain and Ethereum, which can be generated (`mint`) or destroyed (`burn`), can be used for lending, investment, payment, value storing and other application scenarios.
 
 **FOR**: The Force Protocol Eco-Token, also governance token of the QIAN system for voting on QIAN ecology governance and maintaining QIAN price stability.
 
