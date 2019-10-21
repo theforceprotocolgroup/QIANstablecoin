@@ -152,7 +152,7 @@ QIAN 由用户向智能合约质押加密资产生成，初始阶段系统将要
 
 In order to maintain the development and stability of the QIAN ecosystem, the pledge of cryptoassets to cast QIAN will likely generate interest. Interest is a mechanism for adjusting the supply of stablecoins. Interest could be paid in two ways. This decision will be determined by an automatic algorithm.
 
-When the system determines that it needs to improve the system's risk tolerance, the payment direction of interest is paid by the QIAN creators to the system, the interest can be paid in FOR or QIAN, the interest will be converted into FOR, and locked in smart contract; When the QIAN system needs to encourage the mints to increase QIAN liquidity, the interest payment direction will be paid to the QIAN creators by the system, and the interest is paid by the unlocked FOR from smart contract.
+When the algorithm determines that it needs to improve the system's risk tolerance, the payment direction of interest is paid by the QIAN creators to the system, the interest can be paid in FOR or QIAN, the interest will be converted into FOR, and locked in smart contract; When the QIAN system needs to encourage the mints to increase QIAN liquidity, the interest payment direction will be paid to the QIAN creators by the system, and the interest is paid by the unlocked FOR from smart contract.
 
 ### 2. Cryptoasset redeemable mechanism
 
