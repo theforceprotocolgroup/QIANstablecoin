@@ -19,3 +19,12 @@ contract ceth is collateral {
         emit Deposit(msg.sender, msg.value);
     }
 
+    //取出 @amount 数量的抵押物
+    function withdraw(uint256 amount) public {
+        hol[msg.sender].c = usub(hol[msg.sender].c, amount);
+        require(umul(hol[msg.sender].s, rat) <= (umul(hol[msg.sender].c, exr) / PRE9), 
+            "bad exchange ratio");
+        msg.sender.transfer(amount);
+        emit Withdraw(msg.sender, amount);
+    }
+}
