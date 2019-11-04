@@ -27,4 +27,3 @@ rt.async_raiilock(async function() {
     const tx = ctoken.methods.rise();
     await rt.send(tx, ctokenaddress);
 });
-   

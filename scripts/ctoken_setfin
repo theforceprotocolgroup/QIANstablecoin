@@ -1,0 +1,40 @@
+#!/usr/bin/env node
+
+const rt = require("./rt");
+
+//token: USDT, DAI, TES, ...
+const argv = rt.yargs()
+    .options('token', {
+        alias: 't',
+        describe: 'The symbol of the token collateral',
+        type: 'string'
+    })
+    .argv;
+
+rt.async_raiilock(async function() {
+
+    const token = argv.token;
+
+    rt.assert(token, "missing option: --token | -t");
+
+    const deployedctoken = rt.get("ctoken");
+    rt.log("get ctoken:", 
+        JSON.stringify(deployedctoken, null, 4));
+    
+    const ctokenaddress = deployedctoken && deployedctoken[token];
+    rt.assert(ctokenaddress, `not find ctoken(${token})`);
+
+    const configure = rt.configure()['government']['ctoken'][token];
+    rt.assert(configure, `no get 'government.ctoken.${token}'`);
+
+    let fin = configure.fin;
+    rt.assert(fin == 0 || fin, `no get 'government.ctoken.${token}.fin'`);
+    rt.log(`get 'government.ctoken.${token}.fin': `, fin);
+    fin = fin / 100;
+    fin = rt.web3().utils.toWei(fin.toString(), 'ether').toString();
+    rt.log(`ctoken.methods.setfin(fin = ${fin})`);
+    
+    let ctoken = await rt.rt_contract_at("ctoken", ctokenaddress);
+    const tx = ctoken.methods.setfin(fin);
+    await rt.send(tx, ctokenaddress);
+});
