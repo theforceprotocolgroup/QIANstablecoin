@@ -4,8 +4,8 @@
 
 pragma solidity >= 0.5.0;
 
-import "./authority.sol";
-import "./arith.sol";
+import "./Authority.sol";
+import "./Arith.sol";
 
 
 contract Duckdebtor {
