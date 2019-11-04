@@ -66,7 +66,7 @@ contract Govtoken is Authority, Arith {
         emit Back(msg.sender, amt);
     }
 
-    //给 @user 解锁 @amt 数量的代币. 仅允许flop合约调用.
+    //给 @user 解锁 @amt 数量的代币. 仅允许核心合约调用.
     function mint(address user, uint256 amt) public auth {
         require(well);
         tok.transfer(user, amt);
@@ -80,7 +80,7 @@ contract Govtoken is Authority, Arith {
         emit Transfer(who, address(this), amt);
     }
 
-    //从 @src 转账 @amt 到 @dst, 仅允许flap合约调用.
+    //从 @src 转账 @amt 到 @dst, 仅允许核心合约调用.
     //当 @src = bidder(竞拍者), @dst = address(this) 时, 同burn, 作为mint的反操作.
     //前置条件: msg.sender = bidder, FOR.approve(address(this), amt);
     function move(address src, address dst, uint256 amt) public auth {
