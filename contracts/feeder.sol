@@ -4,7 +4,7 @@
 
 pragma solidity >= 0.5.0;
 
-import "./authority.sol";
+import "./Authority.sol";
 
 
 contract Feeder is Authority {
