@@ -9,7 +9,7 @@
 
 pragma solidity >= 0.5.0;
 
-import "./arith.sol";
+import "./Arith.sol";
 
 
 contract Stderc20 is Arith {
