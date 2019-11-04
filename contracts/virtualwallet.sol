@@ -10,6 +10,6 @@ contract Transferable {
 }
 
 
-contract virtualwallet is arith {
+contract Virtualwallet is Arith {
     
 }
