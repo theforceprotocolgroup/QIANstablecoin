@@ -8,7 +8,7 @@ import "./authority.sol";
 import "./arith.sol";
 
 
-contract duckdebtor {
+contract Duckdebtor {
     function burn(address who, uint256 amount) public;
     function mint(address who, uint256 amount) public;
     function incinterest(uint256 amount) public;
@@ -17,18 +17,18 @@ contract duckdebtor {
 }
 
 
-contract ifixedseller {
+contract Ifixedseller {
     function auction(address cor, address dor, address per, address who, address rec, uint256 qua, uint256 amt, uint256 bid) public returns(uint256);
 }
 
 
-contract ifeeder {
+contract Ifeeder {
     function get() public view returns (uint256);
     function valid() public view returns (bool);
 }
 
 
-contract collateral is authority, arith {
+contract Collateral is Authority, Arith {
     /** 抵押物与稳定币持有状态 */
 
     struct hstate {

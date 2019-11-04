@@ -8,23 +8,23 @@ import "./authority.sol";
 import "./arith.sol";
 
 
-contract istablecoin {
+contract Istablecoin {
     function burn(address who, uint amt) public;
     function mint(address who, uint amt) public;
 }
 
 
-contract ireverseauction {
+contract Ireverseauction {
     function auction(address cor, address dor, address per, address rec, uint256 amt) public returns(uint256);
 }
 
 
-contract iforwardauction {
+contract Iforwardauction {
     function auction(address cor, address dor, address per, address rec, uint256 amt, uint256 bid) public returns(uint256);
 }
 
 
-contract debtor is authority, arith {
+contract Debtor is Authority, Arith {
     /** 系统债务状态 */
 
     mapping (address => uint256) public hol;       //稳定币持有者及数量.

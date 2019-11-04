@@ -7,7 +7,7 @@ pragma solidity >= 0.5.0;
 import "./collateral.sol";
 
 
-contract ceth is collateral {
+contract Ceth is Collateral {
 
     //@d dor
     constructor(address d) collateral(d) public {

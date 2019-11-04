@@ -7,13 +7,13 @@ pragma solidity >= 0.5.0;
 import "./collateral.sol";
 
 
-contract transferable {
+contract Transferable {
     function transfer(address,uint) public returns (bool);
     function transferFrom(address,address,uint) public returns (bool);
 }
 
 
-contract ctoken is collateral {
+contract Ctoken is Collateral {
     transferable public tok;        //Collateral address（抵押物地址）
 
     //@t tok, @d dor
