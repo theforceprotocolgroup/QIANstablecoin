@@ -1,8 +1,7 @@
-/*
-COPYRIGHT © THE FORCE PROTOCOL FOUNDATION LTD.
-原力协议稳定币系统 - 权限管理
-The Force Protocol stablecoin system - authority administration
-*/
+//COPYRIGHT © THE FORCE PROTOCOL FOUNDATION LTD.
+//The Force Protocol stablecoin system - authority administration
+//原力协议稳定币系统 - 权限管理
+
 
 pragma solidity >= 0.5.0;
 
@@ -65,4 +64,4 @@ contract authority
                     ? false 
                     : next.accessible(who, code, sig));
     }
-}    
+}
