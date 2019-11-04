@@ -5,9 +5,11 @@
 
 pragma solidity >= 0.5.0;
 
+
 contract duckauthority {
     function accessible(address who, address code, bytes4 sig) public view returns (bool);
 }
+
 
 contract authority
 {
