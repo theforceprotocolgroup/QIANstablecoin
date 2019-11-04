@@ -1,0 +1,22 @@
+#!/usr/bin/env node
+
+const { merge } = require('sol-merger');
+const fs = require("fs");
+const path = require("path");
+
+if(process.argv.length != 3) {
+    console.log(`Usage: ${path.basename(process.argv[1])} <source-file>`);
+    process.exit(1);
+}
+
+const source = process.argv[2];
+
+if(!fs.existsSync(source)) {
+    console.log("No such file: ", source);
+    process.exit(1);
+}
+
+(async function(){
+    const output = await merge(source);
+    console.log(output);
+})()
