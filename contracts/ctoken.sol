@@ -4,7 +4,7 @@
 
 pragma solidity >= 0.5.0;
 
-import "./collateral.sol";
+import "./Collateral.sol";
 
 
 contract Transferable {
