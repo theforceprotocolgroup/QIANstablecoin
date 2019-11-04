@@ -4,11 +4,11 @@
 
 pragma solidity >= 0.5.0;
 
-import "./authority.sol";
-import "./stderc20.sol";
+import "./Authority.sol";
+import "./Stderc20.sol";
 
 
-contract Stablecoin is stderc20, authority {
+contract Stablecoin is Stderc20, Authority {
 
     //@n name, @s symbol, @d decimals
     constructor(string memory n, string memory s, uint8 d) 
