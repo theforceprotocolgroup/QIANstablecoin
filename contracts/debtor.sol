@@ -1,5 +1,5 @@
 //COPYRIGHT © THE FORCE PROTOCOL FOUNDATION LTD.
-//The Force Protocol Stablecoin system - debt manager
+//The Force Protocol Stablecoin system - Debt Manager
 //原力协议稳定币系统 - 债务管理器
 
 pragma solidity >= 0.5.0;
