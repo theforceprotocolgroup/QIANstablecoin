@@ -1,0 +1,11 @@
+#!/usr/bin/env node
+
+const rt = require("./rt");
+
+//稳定币token
+rt.async_raiilock(async function() {
+    rt.log("deploy stablecoin...");
+    const stablecoin = await rt.rt_contract_new("stablecoin", "THE FORCE PROTOCOL STABLECOIN", "QIAN", 18);
+    rt.log("deploy stablecoin at: ", stablecoin.options.address);
+    rt.set("stablecoin", stablecoin.options.address);
+});
