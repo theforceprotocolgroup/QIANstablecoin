@@ -1,0 +1,55 @@
+#!/usr/bin/env node
+
+const rt = require("./rt");
+
+//ERC20抵押支持
+rt.async_raiilock(async function() {
+    const value = {};
+    const ctokens = rt.getctokens();
+    for(let i = 0; i < ctokens.length; ++i) {
+        const symbol = ctokens[i].symbol.toUpperCase();
+        const address = ctokens[i].address;
+
+        rt.log(`deploy ctoken(${symbol})...`);
+
+        const dor = rt.get("debtor");
+        rt.log("get debtor: ", dor);
+
+        const ctoken = await rt.rt_contract_new("ctoken", address, dor);
+        rt.log(`deploy ctoken(${symbol}) at: `, ctoken.options.address);
+
+        //授权
+        let tx;
+        
+        const ctokenaddress = ctoken.options.address;
+        const bebtor = await rt.rt_contract_at("debtor", dor);
+
+        rt.log(`bebtor.methods.enable: ctoken => debtor.incinterest`);
+        const debtor_incinterest_sig = rt.web3().eth.abi.encodeFunctionSignature('incinterest(uint256)');
+        tx = bebtor.methods.enable(ctokenaddress, debtor_incinterest_sig);
+        await rt.send(tx, dor);
+    
+        rt.log(`bebtor.methods.enable: ctoken => debtor.decinterest`);
+        const debtor_decinterest_sig = rt.web3().eth.abi.encodeFunctionSignature('decinterest(uint256)');
+        tx = bebtor.methods.enable(ctokenaddress, debtor_decinterest_sig);
+        await rt.send(tx, dor);
+    
+        rt.log(`bebtor.methods.enable: ctoken => debtor.incbaddebt`);
+        const debtor_incbaddebt_sig = rt.web3().eth.abi.encodeFunctionSignature('incbaddebt(uint256)');
+        tx = bebtor.methods.enable(ctokenaddress, debtor_incbaddebt_sig);
+        await rt.send(tx, dor);
+    
+        rt.log(`bebtor.methods.enable: ctoken => debtor.burn`);
+        const debtor_burn_sig = rt.web3().eth.abi.encodeFunctionSignature('burn(address,uint256)');
+        tx = bebtor.methods.enable(ctokenaddress, debtor_burn_sig);
+        await rt.send(tx, dor);
+    
+        rt.log(`bebtor.methods.enable: ctoken => debtor.mint`);
+        const debtor_mint_sig = rt.web3().eth.abi.encodeFunctionSignature('mint(address,uint256)');
+        tx = bebtor.methods.enable(ctokenaddress, debtor_mint_sig);
+        await rt.send(tx, dor);
+        
+        value[symbol] = ctokenaddress;
+    }
+    rt.set(`ctoken`, value);
+});
