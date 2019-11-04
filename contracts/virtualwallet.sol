@@ -9,6 +9,7 @@ contract Transferable {
     function transferFrom(address,address,uint) public returns (bool);
 }
 
+
 contract virtualwallet is arith {
     
 }
