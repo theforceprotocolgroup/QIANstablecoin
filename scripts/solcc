@@ -1,0 +1,107 @@
+#!/usr/bin/env node
+
+// hold on to any exception handlers that existed prior to this script running, we'll be adding them back at the end
+var originalUncaughtExceptionListeners = process.listeners("uncaughtException");
+
+var fs = require('fs-extra');
+var path = require('path');
+var solc = require('solc');
+var yargs = require('yargs');
+
+// FIXME: remove annoying exception catcher of Emscripten
+//        see https://github.com/chriseth/browser-solidity/issues/167
+process.removeAllListeners('uncaughtException');
+
+yargs.usage('Usage: $0 [options] [input_file...]')
+    .option('version', {
+        describe: 'Show version and exit.',
+        type: 'boolean'
+    })
+    .option('optimize', {
+        describe: 'Enable bytecode optimizer.',
+        type: 'boolean'
+    })
+    .option('output', {
+        alias: 'o',
+        describe: 'Output directory for the contracts.',
+        type: 'string'
+    })
+    .version(solc.version())
+    .help()
+
+
+var argv = yargs.argv;
+var files = argv._;
+var destination = argv['output'] || '.'
+var sources = {};
+
+function abort (msg) {
+    console.error(msg);
+    process.exit(1);
+}
+
+for (var i = 0; i < files.length; i++) {
+    try {
+        sources[files[i]] = { content: fs.readFileSync(files[i]).toString() };
+    } catch (e) {
+        abort('Error reading ' + files[i] + ': ' + e);
+    }
+}
+
+function importhook (path) {
+    return {
+        contents: fs.readFileSync(path).toString()
+    }
+}
+
+var output = JSON.parse(solc.compileStandardWrapper(JSON.stringify({
+    language: 'Solidity',
+    settings: {
+        optimizer: {
+            enabled: argv.optimize || false,
+        },
+        outputSelection: {
+            '*': {
+                '*': ['abi', 'evm.bytecode']
+            }
+        }
+    },
+    sources: sources
+}), importhook));
+
+if (!output) {
+    abort('No output from compiler');
+} else if (output['errors']) {
+    for (var error in output['errors']) {
+        var message = output['errors'][error]
+        if (message.severity === 'warning') {
+            console.log(message.formattedMessage);
+        } else {
+            console.error(message.formattedMessage)
+            process.exit(1);
+        }
+    }
+}
+
+fs.ensureDirSync(destination);
+
+function writeFile (file, content) {
+    file = path.join(destination, file);
+    fs.writeFile(file, content, function (err) {
+        if (err) {
+            console.error('Failed to write ' + file + ': ' + err);
+        }
+    });
+}
+
+for (var fileName in output.contracts) {
+    for (var contractName in output.contracts[fileName]) {
+        writeFile(contractName + '.bin', output.contracts[fileName][contractName].evm.bytecode.object);
+        writeFile(contractName + '.abi', JSON.stringify(output.contracts[fileName][contractName].abi));
+    }
+}
+
+// Put back original exception handlers.
+originalUncaughtExceptionListeners.forEach(function (listener) {
+    process.addListener('uncaughtException', listener);
+});
