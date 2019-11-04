@@ -6,15 +6,18 @@ pragma solidity >= 0.5.0;
 
 import "./authority.sol";
 
+
 contract duckgovtoken {
     function transfer(address to, uint amount) public;       //FOR is not a standard ERC20 Token （FOR不是标准的ERC20 Token.）
     function transferFrom(address from, address to, uint amount) public returns (bool);
 }
 
+
 contract duckioutoken {
     function burn(address who, uint256 amount) public;
     function mint(address who, uint256 amount) public;
 }
+
 
 contract approval is authority {
     /** 投票 */
