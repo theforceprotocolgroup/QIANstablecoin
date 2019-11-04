@@ -1,0 +1,42 @@
+#!/usr/bin/env node
+
+const rt = require("./rt");
+
+//token: USDT, DAI, TES, ...
+const argv = rt.yargs()
+    .options('token', {
+        alias: 't',
+        describe: 'The symbol of the token collateral',
+        type: 'string'
+    })
+    .argv;
+
+rt.async_raiilock(async function() {
+
+    const token = argv.token;
+
+    rt.assert(token, "missing option: --token | -t");
+    
+    const deployedctoken = rt.get("ctoken");
+    rt.log("get ctoken:", JSON.stringify(deployedctoken, null, 4));
+    
+    const ctokenaddress = deployedctoken && deployedctoken[token];
+    rt.assert(ctokenaddress, `not find ctoken(${token})`);
+
+    const configure = rt.configure()['government']['ctoken'][token];
+    rt.assert(configure, `no get 'government.tokancoll.${token}'`);
+    
+    let gth = configure.gth;
+    rt.assert(gth == 0 || gth, `no get 'government.tokancoll.${token}.gth'`);
+    rt.log(`get 'government.tokancoll.${token}.gth': `, gth);
+
+    //duty=$(bc -l <<< "scale=27; e( l(2.5 / 100 + 1)/(60 * 60 * 24 * 365)) * 10^27")
+    gth = Math.log(gth/100 + 1)/(60 * 60 * 24 * 365);
+    gth = 1e18 * Math.E ** gth;
+    gth = gth.toString();
+    rt.log(`ctoken.methods.setgth(gth = ${gth})`);
+
+    let ctoken = await rt.rt_contract_at("ctoken", ctokenaddress);
+    const tx = ctoken.methods.setgth(gth);
+    await rt.send(tx, ctokenaddress);
+});
