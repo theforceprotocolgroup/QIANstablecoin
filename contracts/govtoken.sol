@@ -4,8 +4,8 @@
 
 pragma solidity >= 0.5.0;
 
-import "./authority.sol";
-import "./arith.sol";
+import "./Authority.sol";
+import "./Arith.sol";
 
 
 contract Nonstderc20 {
@@ -17,7 +17,7 @@ contract Nonstderc20 {
 
 //FOR government implementation
 
-contract govtoken is authority, arith {
+contract Govtoken is Authority, Arith {
     mapping(address => uint) public donors; //单人累计捐赠总量, 只增不减;
     uint256                  public tot;    //全部累计捐赠总量, 只增不减;
     nonstderc20              public tok;    //治理代币 FOR
