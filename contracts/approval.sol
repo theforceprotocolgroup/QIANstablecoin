@@ -1,6 +1,6 @@
-//COPYRIGHT © THE FORCE PROTOCOL FOUNDATION LTD.
-//The Force Protocol Stablecoin system - community governance
-//原力协议稳定币系统 - 社区治理
+// COPYRIGHT © THE FORCE PROTOCOL FOUNDATION LTD.
+// The Force Protocol Stablecoin system - community governance
+// 原力协议稳定币系统 - 社区治理
 
 pragma solidity >= 0.5.0;
 
