@@ -1,0 +1,35 @@
+#!/usr/bin/env node
+
+const rt = require("./rt");
+
+//债务管理器
+rt.async_raiilock(async function() {
+
+    rt.log("deploy debtor...");
+    const stablecointokenaddress = rt.get("stablecoin");  //稳定币合约       
+    rt.log("get stablecoin: ", stablecointokenaddress);
+
+    const govtokenaddress = rt.get("govtoken");
+    rt.log("get govtoken: ", govtokenaddress);
+
+    const debtor = await rt.rt_contract_new("debtor", stablecointokenaddress, govtokenaddress);
+    rt.log("deploy debtor at: ", debtor.options.address);
+    
+    const debtoraddress = debtor.options.address;
+    const stablecoin = await rt.rt_contract_at("stablecoin", stablecointokenaddress);
+    let tx;
+
+    //授权
+
+    rt.log(`stablecoin.methods.enable: debtor => stablecoin.mint`);
+    const stablecoin_mint_sig = rt.web3().eth.abi.encodeFunctionSignature('mint(address,uint256)');
+    tx = stablecoin.methods.enable(debtoraddress, stablecoin_mint_sig);
+    await rt.send(tx, stablecointokenaddress);
+
+    rt.log(`stablecoin.methods.enable: debtor => stablecoin.burn`);
+    const stablecoin_burn_sig = rt.web3().eth.abi.encodeFunctionSignature('burn(address,uint256)');
+    tx = stablecoin.methods.enable(debtoraddress, stablecoin_burn_sig);
+    await rt.send(tx, stablecointokenaddress);
+
+    rt.set("debtor", debtoraddress);
+});
