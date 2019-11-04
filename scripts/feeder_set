@@ -1,0 +1,32 @@
+#!/usr/bin/env node
+
+const rt = require("./rt");
+
+//token: USDT, DAI, TES, ...
+const argv = rt.yargs()
+    .options('token', {
+        alias: 't',
+        describe: 'The symbol of the token collateral',
+        type: 'string'
+    })
+    .argv;
+
+rt.async_raiilock(async function() {
+
+    const token = argv.token;
+    rt.assert(token, "missing option: --token | -t");
+
+    const deployedfeeder = rt.get("feeder");
+    rt.log('get feeder:',
+        JSON.stringify(deployedfeeder, null, 4));
+    const feederaddress = deployedfeeder && deployedfeeder[token];
+    rt.assert(feederaddress, `not find feeder(${token}`);
+
+    let feeder = await rt.rt_contract_at("feeder", feederaddress);
+    const val = rt.web3().utils.toWei(String(1)).toString();
+    const exp = String(36000);
+    rt.log(`feeder.set(val = ${val}, exp = ${exp})`);
+
+    const tx = feeder.methods.set(val, exp);
+    await rt.send(tx, feederaddress);
+});
