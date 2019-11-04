@@ -1,4 +1,5 @@
 //COPYRIGHT © THE FORCE PROTOCOL FOUNDATION LTD.
+//The Force Protocol Stablecoin system - Collateral management
 //原力协议稳定币系统 - 抵押物管理
 
 pragma solidity >= 0.5.0;
