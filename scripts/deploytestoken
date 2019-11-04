@@ -1,0 +1,12 @@
+#!/usr/bin/env node
+
+const rt = require("./rt");
+
+//测试token
+rt.async_raiilock(async function() {
+    rt.log("deploy testoken...");
+    const tot = rt.web3().utils.toWei("100000000", 'ether');
+    const testoken = await rt.rt_contract_new("stderc20", "Test token", "TES", 18, tot);
+    rt.log("deploy testoken at: ", testoken.options.address);
+    rt.set("testoken", testoken.options.address);
+});
