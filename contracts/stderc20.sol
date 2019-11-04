@@ -1,4 +1,5 @@
 //COPYRIGHT © THE FORCE PROTOCOL FOUNDATION LTD.
+//The Force Protocol Stablecoin system - Standard ERC20 implement
 //原力协议稳定币系统 - 标准ERC20实现
 
 /**  
@@ -10,7 +11,8 @@ pragma solidity >= 0.5.0;
 
 import "./arith.sol";
 
-contract stderc20 is arith {
+
+contract Stderc20 is Arith {
     string  public name;
     string  public symbol;
     uint8   public decimals;
