@@ -1,0 +1,7 @@
+#!/usr/bin/env node
+
+const rt = require("./rt");
+
+rt.async_raiilock(async function() {
+    rt.export(`${process.env.PWD}/deployed.json`);
+});
