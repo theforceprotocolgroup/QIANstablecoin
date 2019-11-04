@@ -6,6 +6,7 @@ pragma solidity >= 0.5.0;
 
 import "./collateral.sol";
 
+
 contract ceth is collateral {
 
     //@d dor
