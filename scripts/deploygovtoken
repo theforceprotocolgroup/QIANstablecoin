@@ -1,0 +1,15 @@
+#!/usr/bin/env node
+
+const rt = require("./rt");
+
+//治理代币合约
+rt.async_raiilock(async function() {
+    rt.log("deploy govtoken...");
+    //{symbol: "FOR", address: "0x..."}
+    const fortoken = rt.find_govtoken();
+    rt.assert(fortoken, "not find 'FOR' token address");
+    rt.log("find 'FOR' token: ", fortoken);
+    const govtoken = await rt.rt_contract_new("govtoken", fortoken.address);
+    rt.log("deploy govtoken: ", govtoken.options.address);
+    rt.set("govtoken", govtoken.options.address);
+});
