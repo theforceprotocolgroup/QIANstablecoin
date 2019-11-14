@@ -5,70 +5,72 @@
 pragma solidity >= 0.5.0;
 
 import "./Authority.sol";
-import "./Arith.sol";
 
-
-contract Istablecoin {
-    function burn(address who, uint amt) public;
-    function mint(address who, uint amt) public;
+contract IStablecoin {
+    function burn(address who, uint amount) public;
+    function mint(address who, uint amount) public;
 }
 
-
-contract Ireverseauction {
-    function auction(address cor, address dor, address per, address rec, uint256 amt) public returns(uint256);
+contract IAsset {
+    function withdraw(address who, uint256 amount) public;
+    function deposit(address who, uint256 amount) public payable;
+    function balance(address who) public view returns(uint256);
 }
 
-
-contract Iforwardauction {
-    function auction(address cor, address dor, address per, address rec, uint256 amt, uint256 bid) public returns(uint256);
+contract IDebtauction {
+    function auction(address rve, address iss, address oss, uint256 iam, uint256 bid) public returns (uint id);
 }
 
+contract IGovauction {
+    function auction(address rve, address iss, address oss, uint256 oam, uint bid) public returns(uint id);
+}
 
-contract Debtor is Authority, Arith {
+contract IWallet {
+    function get(address tok) public returns(address);
+}
+
+contract IGovtoken {
+    function tok() public returns(address);
+}
+
+contract Debtor is Authority {
     /** 系统债务状态 */
 
-    mapping (address => uint256) public hol;       //稳定币持有者及数量.
+    mapping (address => uint256) public hol;       //稳定币持有者及数量(hold)
 
     uint256 public tot;                            //已发行的稳定币总量(total)
     uint256 public bad;                            //坏账(baddebt)
-    uint256 public ext;                            //购买的稳定币数量(extracoin)
+    uint256 public cum;                            //累计购买的稳定币数量(cumulative)
     
     /** 结算参数 */
 
-    uint256 public seg;                            //单次购买稳定币的数量.
-    uint256 public sel;                            //单次卖出稳定币的数量.
-
-    ireverseauction public ber;                    //稳定币购买合约(buy);
-    iforwardauction public ser;                    //稳定币拍卖合约(sell);
-
-    address             public gov;                //治理代币
+    address public dau;                    //债务拍卖合约(debt auction)
+    address public gau;                    //治理拍卖合约(gov auction)
 
     /** 稳定币 */
 
-    istablecoin public tok;
+    IStablecoin public tok;
+
+    /** 治理token */
+
+    address public gov;
 
     /** 风险参数 */
 
-    uint256 public tdc;                            //总债务上限(Total Debt Ceiling);
+    uint256 public tdc;                    //总债务上限(Total Debt Ceiling);
+    IWallet public wet;                    //钱包
 
     /** 合约运行状态 */
         
-    bool public wel;                               //禁止数据流动
+    bool public hea;                      //系统状态标记(healthy), false 表示系统已经停止运行, 并允许捐助者按比例取回
     
-    function stop() public auth {
-        wel = false;
-    }
-
-    function start() public auth {
-        wel = true;
-    }
-
     /** 初始化 */
     
-    constructor(address s, address g) public {
-        tok = istablecoin(s);
+    constructor(address w, address s, address g) public {
+        tok = IStablecoin(s);
+        wet = IWallet(w);
         gov = g;
-        wel = true;
+        hea = true;
     }
 
     /** 治理 */
@@ -77,121 +79,140 @@ contract Debtor is Authority, Arith {
         tdc = v;
     }
 
-    function setber(address v) public auth {
-        ber = ireverseauction(v);
+    function setdau(address v) public auth {
+        dau = v;
     }
 
-    function setser(address v) public auth {
-        ser = iforwardauction(v);
+    function setgau(address v) public auth {
+        gau = v;
+    }
+
+    function sethea(bool v) public auth {
+        hea = v;
     }
 
     /** 稳定币管理 */
 
-    //为 @who 增发 @amt 数量的稳定币, 仅能被 @collateral.exchangeto 方法调用.
-    function mint(address who, uint256 amt) public auth {
-        tok.mint(who, amt);
-        hol[who] = uadd(hol[who], amt);
-        tot = uadd(tot, amt);
+    //为 @who 增发 @amount 数量的稳定币, 仅能被 @collateral.borrow 方法调用.
+    function mint(address who, uint256 amount) public auth {
+        require(hea);
+        tok.mint(who, amount);
+        hol[who] = uadd(hol[who], amount);
+        tot = uadd(tot, amount);
         //检查是否超过允许的稳定币发行总量.
-        require(tot <= tdc, "out of total debt ceiling");
+        require(tot <= tdc, "out of total debt");
     }
 
-    //为 @who 销毁 @amt 数量的稳定币, 仅能被 @collateral.exchangefrom 方法调用.
+    //为 @who 销毁 @amount 数量的稳定币, 仅能被 @collateral.payback 方法调用.
     //需要 tok.approve 授权
-    function burn(address who, uint256 amt) public auth {
-        require(hol[who] >= amt);
-        tok.burn(who, amt);
-        hol[who] = usub(hol[who], amt);
-        tot = usub(tot, amt);
+    function burn(address who, uint256 amount) public auth {
+        require(hea);
+        require(hol[who] >= amount);
+        tok.burn(who, amount);
+        hol[who] = usub(hol[who], amount);
+        tot = usub(tot, amount);
     }
 
     /** 稳定币转入转出 */
 
     //转入(销毁)稳定币token, 增加稳定币持有记录.
     //销毁稳定币, 需要 @tok.approve 授权.
-    function deposit(uint256 amt) public {
-        require(wel);
-        require(amt > 0);
-        tok.burn(msg.sender, amt);
+    function deposit(address who, uint256 amount) public {
+        require(hea);
+        tok.burn(who, amount);
         //增加系统中的稳定币持有记录
-        hol[msg.sender] = uadd(hol[msg.sender], amt);
+        hol[who] = uadd(hol[who], amount);
     }
 
     //转出(增发)稳定币token, 减少稳定币持有记录.
-    function withdraw(uint256 amt) public {
-        require(wel);
-        require(amt > 0);
-        require(hol[msg.sender] >= amt);
+    function withdraw(address who, uint256 amount) public {
+        require(hea);
+        require(hol[who] >= amount);
         //增发稳定币
-        tok.mint(msg.sender, amt);
+        tok.mint(who, amount);
         //减少系统中的稳定币持有记录
-        hol[msg.sender] = usub(hol[msg.sender], amt);
+        hol[who] = usub(hol[who], amount);
     }
 
     /** 累计利息 */
 
-    function incinterest(uint256 amt) public auth {
-        require(wel);
-        tot = uadd(tot, amt);
-        hol[address(this)] = uadd(hol[address(this)], amt);
+    function inci(uint256 amount) public auth {
+        require(hea);
+        tot = uadd(tot, amount);
+        hol[address(this)] = uadd(hol[address(this)], amount);
     }
 
-    function decinterest(uint256 amt) public auth {
-        require(wel);
-        tot = usub(tot, amt);
-        hol[address(this)] = usub(hol[address(this)], amt);
+    function deci(uint256 amount) public auth {
+        require(hea);
+        tot = usub(tot, amount);
+        hol[address(this)] = usub(hol[address(this)], amount);
     }
 
     /** 累加系统坏账 */
-
-    function incbaddebt(uint256 amt) public auth {
-        bad = uadd(bad, amt);
-    }
-
-    /** 债务转移 */
-
-    //仅允许 @ser, @ber 调用
-    function move(address from, address to, uint256 amt) public auth {
-        hol[from] = usub(hol[from], amt);
-        hol[to] = uadd(hol[to], amt); //当to == address(this) 时, 实际上是累加系统收入.
-    }
-
-    /** 坏账处理 */
-
-    //购买稳定币
-    function buy() public returns (uint id) {
-        //确保当前系统中没有盈余, 如果有盈余需要先通过 @repay 归还部分债务.
-        require(hol[address(this)] == 0);
-        //确保剩余的债务大于购买数量: 当前合约债务 - 稳定币已购买总量 >= 本次要购买的稳定币数量 @seg
-        //当前合约的债务在 @collateral.liquidate 中产生
-        require(bad >= ext && (bad - ext) >= seg);
-        //累计当前已购买的稳定币总量, 防止多买.
-        ext = uadd(ext, seg);
-        //发起竞买拍卖
-        //government token. => stablecoin 
-        id = ber.auction(gov, address(this), gov, address(this), seg); //gov.mint
+    function incb(uint256 amount) public auth {
+        require(hea);
+        bad = uadd(bad, amount);
     }
     
-    //拍卖稳定币
-    function sell() public returns (uint id) {
-        //仅当当前合约没有债务并且没有额外购买的稳定币时才允许拍卖多余的稳定币.
-        require(bad == 0 && ext == 0);
-        require(hol[address(this)] >= sel);
-        //stablecoin => government token.
-        id = ser.auction(address(this), gov, address(this), gov, sel, 0);
+    /** 从钱包中把抵押物拍卖所得取回 */
+
+    function take(uint256 s) public auth {
+        require(hea);
+        IAsset(wet.get(address(tok))).withdraw(address(this), s);
+        hol[address(this)] = uadd(hol[address(this)], s);
+    }
+
+    /** 购买稳定币 */
+    //(event) Liquidauction.End 
+    //  => this.take 
+    //  => this.repay 
+    //  => this.buy 
+    //  => this.repay
+    // [=> this.buy => this.repay ...]
+
+    function buy(uint256 s) public auth {
+        require(hol[address(this)] == 0,
+            "require: hol[address(this)] == 0");
+        require(usub(bad, cum) >= s,
+            "require: usub(bad, cum) >= s");
+        cum = uadd(cum, s);
+        IDebtauction(dau).auction(address(this), address(tok), gov, uint16(-1), s);
+    }
+
+    /** 拍卖稳定币 */
+
+    function sel(uint256 s) public auth {
+        require(bad == 0 && cum == 0,
+            "require: bad == 0 && cum == 0");
+        hol[address(this)] = usub(hol[address(this)], s);
+        tok.mint(gau, s);
+        IAsset(wet.get(address(tok))).deposit(gau, s);
+        IGovauction(gau).auction(gov, IGovtoken(gov).tok(), address(tok), s, 0);
     }
 
     //归还债务
     function repay() public {
-        require(hol[address(this)] > 0 && bad > 0);
+        require(hol[address(this)] > 0 && bad > 0, 
+            "require: hol[address(this)] > 0 && bad > 0");
         //确定当前需要归还给系统的债务与当前系统的盈余, 取较小者作为待归还数量.
-        uint256 amt = min(hol[address(this)], bad);
-        //结算债务
-        hol[address(this)] = usub(hol[address(this)], amt);
-        bad = usub(bad, amt);
-        tot = usub(tot, amt);
-        //减少稳定币购买记录.
-        amt = min(amt, ext);
-        ext = usub(ext, amt);
+        uint256 pay = min(hol[address(this)], bad);
+        hol[address(this)] = usub(hol[address(this)], pay);
+        bad = usub(bad, pay);
+        tot = usub(tot, pay);
+
+        pay = min(pay, cum);
+        cum = usub(cum, pay);
+    }
+    
+    function min(uint256 x, uint256 y) internal pure returns(uint256 z) {
+        z = (x <= y ? x : y);
+    }
+    function usub(uint256 x, uint256 y) internal pure returns (uint256 z) {
+        require(x >= y);
+        z = x - y;
+    }
+    function uadd(uint256 x, uint256 y) internal pure returns (uint256 z) {
+        z = x + y;
+        require (z >= x);
     }
 }

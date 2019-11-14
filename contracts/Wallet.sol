@@ -17,6 +17,12 @@ contract Wallet is Authority {
         return assets[tok];
     }
 
+    function join(address asset) public returns(address) {
+        require(assets[asset] == address(0), "asset has been joined");
+        assets[asset] = asset;
+        return asset;
+    }
+
     function get(address tok) public view returns(address) {
         return assets[tok];
     }

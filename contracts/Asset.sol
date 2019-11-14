@@ -4,7 +4,7 @@
 
 pragma solidity >= 0.5.0;
 
-contract Transferable {
+contract IToken {
     function transfer(address,uint) public returns (bool);
     function transferFrom(address,address,uint) public returns (bool);
 }
@@ -33,7 +33,7 @@ contract Asset {
             require(amount == msg.value, "amount mismatch with msg.value");
             return;
         }
-        require(Transferable(token).transferFrom(who, address(this), amount));
+        require(IToken(token).transferFrom(who, address(this), amount));
         emit Deposit(msg.sender, who, amount);
     }
 
@@ -44,7 +44,7 @@ contract Asset {
             who.transfer(amount);
             return;
         }
-        require(Transferable(token).transfer(who, amount));
+        require(IToken(token).transfer(who, amount));
         emit Withdraw(msg.sender, who, amount);
     }
 
@@ -57,7 +57,7 @@ contract Asset {
     function move(address from, address to, uint256 amount) public {
         require(balance[from] >= amount, "insufficient balance");
         if(from != msg.sender) {
-            require(allowance[from][msg.sender] >= amount, "unapproved to move");
+            require(allowance[from][msg.sender] >= amount, "insufficient allowance to move");
             allowance[from][msg.sender] 
                 = usub(allowance[from][msg.sender], amount);
         }
