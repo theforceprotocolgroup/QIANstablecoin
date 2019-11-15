@@ -2,31 +2,30 @@
 
 const rt = require("./rt");
 
-//token: USDT, DAI, TES, ...
-const argv = rt.yargs()
-    .options('token', {
-        alias: 't',
-        describe: 'The symbol of the token collateral',
-        type: 'string'
-    })
-    .argv;
-
 rt.async_raiilock(async function() {
+    const deployedFeeder = rt.get("Feeder");
+    rt.log('get Feeder:', JSON.stringify(deployedFeeder, null, 4));
 
-    const token = argv.token;
-    rt.assert(token, "missing option: --token | -t");
+    const tokens = rt.gettokens();
+    for(let i = 0; i < tokens.length; ++i) {
+        const token = tokens[i].symbol;
 
-    const deployedfeeder = rt.get("feeder");
-    rt.log('get feeder:',
-        JSON.stringify(deployedfeeder, null, 4));
-    const feederaddress = deployedfeeder && deployedfeeder[token];
-    rt.assert(feederaddress, `not find feeder(${token}`);
+        const feederAddress = deployedFeeder && deployedFeeder[token];
+        rt.assert(feederAddress, `not find Feeder(${token}`);
+        let Feeder = await rt.rt_contract_at("Feeder", feederAddress);
+        
+        const configure = rt.configure()['government']['feeder'][token];
+        rt.assert(configure, `no get 'government.Feeder.${token}'`);
+    
+        const pce = configure.pce;
+        rt.assert(pce == 0 || pce, `no get 'government.feeder.${token}.pce'`);
+        rt.log(`get 'government.feeder.${token}.pce': `, pce);
+        
+        const val = rt.web3().utils.toWei(String(pce)).toString();
+        const exp = String(360000);
+        rt.log(`Feeder.set(val = ${val}, exp = ${exp})`);
 
-    let feeder = await rt.rt_contract_at("feeder", feederaddress);
-    const val = rt.web3().utils.toWei(String(1)).toString();
-    const exp = String(36000);
-    rt.log(`feeder.set(val = ${val}, exp = ${exp})`);
-
-    const tx = feeder.methods.set(val, exp);
-    await rt.send(tx, feederaddress);
+        const tx = Feeder.methods.set(val, exp);
+        await rt.send(tx, feederAddress);
+    }
 });

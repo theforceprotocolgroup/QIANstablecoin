@@ -1,0 +1,33 @@
+#!/usr/bin/env node
+
+const rt = require("./rt");
+
+//ERC20抵押支持
+rt.async_raiilock(async function() {
+    rt.log(`deploy Wallet...`);
+
+    const Wallet = await rt.rt_contract_new("Wallet");
+    rt.log(`deploy Wallet at: `, Wallet.options.address);
+    const walletAddress = Wallet.options.address;
+
+    rt.set(`Wallet`, walletAddress);
+
+    const tokens = rt.gettokens();
+    for(let i = 0; i < tokens.length; ++i) {
+        const address = tokens[i].address;
+        rt.log(`Wallet.create(address = ${address}`);
+        const tx = Wallet.methods.create(address);
+        await rt.send(tx, walletAddress);
+    }
+
+    const Stablecoin = rt.get("Stablecoin");
+    rt.log("get Stablecoin: ", Stablecoin);
+
+    let tx = Wallet.methods.create(Stablecoin);
+    await rt.send(tx, walletAddress);
+
+    const Govtoken = rt.get("Govtoken");
+    rt.log("get Govtoken: ", Govtoken);
+    tx = Wallet.methods.join(Govtoken);
+    await rt.send(tx, walletAddress);
+});

@@ -3,5 +3,7 @@
 const rt = require("./rt");
 
 rt.async_raiilock(async function() {
-    rt.export(`${process.env.PWD}/deployed.json`);
+    const output = `${process.env.PWD}/${rt.rt_conf.network}.address.json`;
+    rt.log("export to: ", output);
+    rt.export(output);
 });

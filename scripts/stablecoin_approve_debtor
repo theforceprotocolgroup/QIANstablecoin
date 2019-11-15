@@ -1,0 +1,18 @@
+#!/usr/bin/env node
+
+const rt = require("./rt");
+
+rt.async_raiilock(async function () {
+    const stablecoinAddress = rt.get("Stablecoin")
+    rt.log(`get Stablecoin:`, stablecoinAddress);
+    const Debtor = rt.get("Debtor");
+    rt.log(`get Debtor:`, Debtor);
+
+    const amount = "100000000000000000000000000";
+
+    rt.log(`Stablecoin.methods.approve(who = ${Debtor}, amount = ${amount})`);
+
+    const Stablecoin = rt.rt_contract_at("Stablecoin", stablecoinAddress);
+    tx = Stablecoin.methods.approve(Debtor, amount);
+    await rt.send(tx, stablecoinAddress);
+});

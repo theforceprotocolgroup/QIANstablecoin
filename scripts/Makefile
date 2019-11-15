@@ -8,7 +8,7 @@
 
 CC := $(SOLC)
 
-modules = feeder stablecoin govtoken debtor ceth ctoken
+modules = Join Stablecoin Govtoken Wallet Liquidauction Debtauction Govauction Feeder Debtor Collateral Forward
 
 SOLCBUILD = $(CC) -o $(BUILD_DIR) $< || exit 1
 
@@ -22,47 +22,75 @@ vpath %.sol $(SOURCE_DIR)
 all: $(modules)
 	$(SCRIPT_DIR)/export
 
-feeder : feeder.bin feeder.abi
-	$(SCRIPT_DIR)/deployfeeder || exit 1
-	$(SCRIPT_DIR)/feeder_set -t TES || exit 1
-feeder.bin feeder.abi: feeder.sol authority.sol
+Join : Join.bin Join.abi
+	$(SCRIPT_DIR)/deployjoin || exit 1
+Join.bin Join.abi: Join.sol Authority.sol
 	$(SOLCBUILD)
 
-stablecoin : stablecoin.bin stablecoin.abi
-	$(SCRIPT_DIR)/deploystablecoin || exit 1
-stablecoin.bin stablecoin.abi: stablecoin.sol stderc20.sol authority.sol
-	$(SOLCBUILD)
-
-govtoken : govtoken.bin govtoken.abi
+Govtoken : Govtoken.bin Govtoken.abi
 	$(SCRIPT_DIR)/deploygovtoken || exit 1
-govtoken.bin govtoken.abi: govtoken.sol authority.sol arith.sol
+Govtoken.bin Govtoken.abi: Govtoken.sol Authority.sol
 	$(SOLCBUILD)
 
-debtor : debtor.bin debtor.abi stablecoin govtoken
+Stablecoin : Stablecoin.bin Stablecoin.abi
+	$(SCRIPT_DIR)/deploystablecoin || exit 1
+Stablecoin.bin Stablecoin.abi: Stablecoin.sol Stderc20.sol Authority.sol
+	$(SOLCBUILD)
+
+Wallet: Wallet.bin Wallet.abi
+	$(SCRIPT_DIR)/deploywallet || exit 1
+Wallet.bin Wallet.abi: Wallet.sol Asset.sol Authority.sol
+	$(SOLCBUILD)
+
+Debtauction: Debtauction.bin Debtauction.abi Wallet
+	$(SCRIPT_DIR)/deploydebtauction || exit 1
+Debtauction.bin Debtauction.abi: Debtauction.sol
+	$(SOLCBUILD)
+
+Liquidauction: Liquidauction.bin Liquidauction.abi Wallet
+	$(SCRIPT_DIR)/deployliquidauction || exit 1
+Liquidauction.bin Liquidauction.abi: Liquidauction.sol
+	$(SOLCBUILD)
+
+Govauction: Govauction.bin Govauction.abi Wallet
+	$(SCRIPT_DIR)/deploygovauction || exit 1
+Govauction.bin Govauction.abi: Govauction.sol
+	$(SOLCBUILD)
+
+Feeder : Feeder.bin Feeder.abi
+	$(SCRIPT_DIR)/deployfeeder || exit 1
+	$(SCRIPT_DIR)/feeder_set || exit 1
+Feeder.bin Feeder.abi: Feeder.sol Authority.sol
+	$(SOLCBUILD)
+
+Debtor : Debtor.bin Debtor.abi Stablecoin
 	$(SCRIPT_DIR)/deploydebtor || exit 1
 	$(SCRIPT_DIR)/debtor_tdc || exit 1
-
-debtor.bin debtor.abi: debtor.sol authority.sol arith.sol
+	# 仅为测试部署时授权
+	$(SCRIPT_DIR)/stablecoin_approve_debtor || exit 1
+Debtor.bin Debtor.abi: Debtor.sol Authority.sol
 	$(SOLCBUILD)
 
-ceth : ceth.bin ceth.abi debtor
-	$(SCRIPT_DIR)/deployceth || exit 1
-ceth.bin ceth.abi: ceth.sol collateral.sol authority.sol arith.sol
+Collateral: Collateral.bin Collateral.abi Debtor Wallet Liquidauction Join
+	$(SCRIPT_DIR)/deploycollateral || exit 1
+	$(SCRIPT_DIR)/collateral_setfer || exit 1
+	$(SCRIPT_DIR)/collateral_setupp || exit 1
+	$(SCRIPT_DIR)/collateral_setlow || exit 1
+	$(SCRIPT_DIR)/collateral_setove || exit 1
+	$(SCRIPT_DIR)/collateral_setseg || exit 1
+	$(SCRIPT_DIR)/collateral_setgth || exit 1
+	$(SCRIPT_DIR)/collateral_setfin || exit 1
+	$(SCRIPT_DIR)/collateral_feed || exit 1
+Collateral.bin Collateral.abi: Collateral.sol Authority.sol
 	$(SOLCBUILD)
 
-ctoken : ctoken.bin ctoken.abi debtor
-	$(SCRIPT_DIR)/deployctoken || exit 1
-	$(SCRIPT_DIR)/ctoken_setfer -t TES || exit 1
-	$(SCRIPT_DIR)/ctoken_setupp -t TES || exit 1
-	$(SCRIPT_DIR)/ctoken_setlow -t TES || exit 1
-	$(SCRIPT_DIR)/ctoken_setove -t TES || exit 1
-	$(SCRIPT_DIR)/ctoken_setseg -t TES || exit 1
-	$(SCRIPT_DIR)/ctoken_setgth -t TES || exit 1
-	$(SCRIPT_DIR)/ctoken_setfin -t TES || exit 1
-	$(SCRIPT_DIR)/ctoken_feed -t TES || exit 1
-	$(SCRIPT_DIR)/testoken_approve -t TES || exit 1
+# 需要通过 token.approve 对新部署的forward授权
 
-ctoken.bin ctoken.abi: ctoken.sol collateral.sol authority.sol arith.sol
+Forward: Forward.bin Forward.abi Collateral
+	$(SCRIPT_DIR)/deployforward || exit 1
+	# 仅为测试部署时授权.
+	$(SCRIPT_DIR)/testoken_approve_forward || exit 1 
+Forward.bin Forward.abi: Forward.sol
 	$(SOLCBUILD)
 
 .PHONY: clean

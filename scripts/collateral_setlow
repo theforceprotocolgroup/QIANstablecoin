@@ -1,0 +1,29 @@
+#!/usr/bin/env node
+
+const rt = require("./rt");
+
+rt.async_raiilock(async function () {
+    const deployedCollateral = rt.get("Collateral");
+    rt.log("get collateral:", JSON.stringify(deployedCollateral, null, 4));
+
+    const tokens = rt.gettokens();
+    for (let i = 0; i < tokens.length; ++i) {
+        const token = tokens[i].symbol;
+        
+        const collateralAddress = deployedCollateral && deployedCollateral[token];
+        rt.assert(collateralAddress, `not find Collateral(${token})`);
+
+        const configure = rt.configure()['government']['collateral'][token];
+        rt.assert(configure, `no get 'government.collateral.${token}'`);
+
+        const low = configure.low;
+        rt.assert(low == 0 || low, `no get 'government.collateral.${token}.low'`);
+        rt.log(`get 'government.collateral.${token}.low':`, low);
+
+        rt.log(`Collateral.methods.setlow(low = ${low})`);
+
+        let Collateral = await rt.rt_contract_at("Collateral", collateralAddress);
+        const tx = Collateral.methods.setlow(low);
+        await rt.send(tx, collateralAddress);
+    }
+});

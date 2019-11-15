@@ -12,7 +12,8 @@ contract Authority
 {
     IAuthority public next;          //指向其他任何 @IAuthority, 只要实现了 @accessible 方法, 构成权限检查链.
     uint8 countofowners;
-    mapping(address => bool) owners; //管理员权限
+    mapping(address => bool) owners;    //管理员权限
+    address public pendingowner;       //
     mapping(address => mapping(address => mapping(bytes4 => bool))) acl;    //访问控制列表
 
     //验证合约的操作是否被授权.
@@ -43,9 +44,15 @@ contract Authority
     //添加 @who 具有owner权限.
     function setowner(address who) public auth {    //approve
         ++countofowners;
-        require(countofowners < uint8(-1), "setowner: out of setowner ceiling");
-        owners[who] = true;
+        require(countofowners < uint8(-1), "setowner: out of owners");
+        pendingowner = who;
     }
+
+    function confirmowner() public auth {
+        require(msg.sender == pendingowner, "confirmowner: not pending owner");
+        owners[msg.sender] = true;
+    }
+    
     //取消 @who 的owner权限.
     function unsetowner(address who) public auth {
         require((countofowners - 1) > 0, "unsetowner: at least one owner");

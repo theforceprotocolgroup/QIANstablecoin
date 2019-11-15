@@ -1,0 +1,32 @@
+#!/usr/bin/env node
+
+const rt = require("./rt");
+
+//债务管理器
+rt.async_raiilock(async function() {
+    rt.log("deploy Forward...");
+
+    const Forward = await rt.rt_contract_new("Forward");
+    rt.log("deploy Forward at: ", Forward.options.address);
+
+    const deployedCollateral = rt.get("Collateral");
+    rt.log("get Collateral: ", deployedCollateral);
+
+    const tokens = rt.gettokens();
+    for(let i = 0; i < tokens.length; ++i) {
+        const symbol = tokens[i].symbol.toUpperCase();
+        
+        const collateralAddress = deployedCollateral && deployedCollateral[symbol];
+        rt.log("get Collateral address: ", collateralAddress);
+
+        const Collateral = await rt.rt_contract_at("Collateral", collateralAddress);
+        
+        rt.log(`Collateral.methods.enable: Forward => Collateral.move`);
+        const collateral_move_sig = rt.web3().eth.abi.encodeFunctionSignature('move(address,address,uint256)');
+        const tx = Collateral.methods.enable(Forward.options.address, collateral_move_sig);
+        await rt.send(tx, collateralAddress);
+
+    }
+
+    rt.set("Forward", Forward.options.address);
+});

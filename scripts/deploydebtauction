@@ -1,0 +1,23 @@
+#!/usr/bin/env node
+
+const rt = require("./rt");
+
+rt.async_raiilock(async function() {
+    rt.log("deploy Debtauction...");
+
+    const Wallet = rt.get("Wallet");
+    rt.log("get Wallet: ", Wallet);
+
+    const Debtauction = await rt.rt_contract_new("Debtauction", Wallet);
+    rt.log("deploy Debtauction at: ", Debtauction.options.address);
+    
+    const deployedGovtoken = rt.get("Govtoken");
+    rt.log("get Govtoken: ", deployedGovtoken);
+    const Govtoken = await rt.rt_contract_at("Govtoken", deployedGovtoken);
+    const amount = "100000000000000000000000000";
+    rt.log(`Govtoken.methods.approvemint(who = ${Debtauction.options.address}, amount = ${amount})`);
+    const tx = Govtoken.methods.approvemint(Debtauction.options.address, amount);
+    await rt.send(tx, deployedGovtoken);
+
+    rt.set("Debtauction", Debtauction.options.address);
+});

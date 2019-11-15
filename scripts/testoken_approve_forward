@@ -1,0 +1,18 @@
+#!/usr/bin/env node
+
+const rt = require("./rt");
+
+rt.async_raiilock(async function() {
+    const deployedForward = rt.get("Forward");
+    rt.log(`get Forward:`, JSON.stringify(deployedForward, null, 4));
+
+    const testokenAddress = rt.get("testoken");
+    rt.log("get testoken: ", testokenAddress);
+    const amount = "100000000000000000000000000";
+
+    const testoken = rt.rt_contract_at("Stderc20", testokenAddress);
+    rt.log(`testoken.methods.approve(who = ${deployedForward}, amount = ${amount})`);
+
+    tx = testoken.methods.approve(deployedForward, amount);
+    await rt.send(tx, testokenAddress);
+});

@@ -42,6 +42,10 @@ contract ILiquidauction {
         uint256 oam, address iss, uint256 iam, uint256 bid) public returns(uint256);
 }
 
+contract IJoined {
+    function join(address who) public returns(uint256);
+}
+
 contract Collateral is Authority {
 
     struct hstate {
@@ -64,6 +68,8 @@ contract Collateral is Authority {
     uint256 public pce;                        //当前抵押物价格(price);
     address public wet;                        //wallet
 
+    address public jin;                        //Joined, 记录已经使用过系统的账户.
+
     /** 治理参数 */
 
     uint256 public upp;        //允许抵押物产生的稳定币总量上限(upper)
@@ -82,11 +88,12 @@ contract Collateral is Authority {
     event Withdraw(address indexed sender, address indexed who, uint256 amount);
     /** 初始化 */
 
-    constructor(address w, address t, address d, address l) public {
+    constructor(address w, address t, address d, address l, address j) public {
         wet = w;
+        tok = t;
         dor = IDebtor(d);
         lau = l;
-        tok = t;
+        jin = j;
         hea = true;
         rit = now;
         rat = PRE;
@@ -380,6 +387,7 @@ contract Collateral is Authority {
             return;
         }
         require(IToken(tok).transferFrom(who, address(this), amount));
+        IJoined(jin).join(who);
         emit Deposit(msg.sender, who, amount);
     }
 

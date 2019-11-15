@@ -123,12 +123,16 @@ function rt () {
         if (!is) throw new Error(msg);
     }
 
-    this.getctokens = function () {
-        return this.rt_conf.ctokens;
+    this.gettokens = function () {
+        return this.rt_conf.tokens;
     }
 
     this.find_govtoken = function() {
         return this.rt_conf.govtoken;
+    }
+
+    this.owner = function() {
+        return this.rt_web3.eth.accounts.privateKeyToAccount(this.rt_prik).address;
     }
 
     this.require = function (dst) {
@@ -171,14 +175,20 @@ function rt () {
 
     this.send = async function(tx, to) {
         const data = tx.encodeABI();
+        //this.log("data: ", data);
+
         const account = this.rt_web3.eth.accounts.privateKeyToAccount(this.rt_prik);
+        //this.log("account: ", account);
+
         const gas = await tx.estimateGas({from: account.address});
+        //this.log("gas: ", gas);
+
         const stx = await this.rt_web3.eth.accounts.signTransaction({
             data: data,
             gas: gas,
             to: to
         }, this.rt_prik);
-        
+        //this.log("stx: ", stx);
         let _this = this;
         return new Promise(async function (resolve, reject) {
             await _this.rt_web3.eth.sendSignedTransaction(stx.rawTransaction)
@@ -208,7 +218,7 @@ function rt () {
 
             files.forEach(function (file, index) {
                 const data = JSON.parse(fs.readFileSync(`${_this.rt_output_directory}/${file}`));
-                exports[file] = data[file];
+                exports[file.toLowerCase()] = data[file];
             });
 
             const data = JSON.stringify(exports, null, 4);

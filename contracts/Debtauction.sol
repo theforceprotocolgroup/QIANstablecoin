@@ -57,7 +57,7 @@ contract Debtauction {
         states[id].exp = uint32(now) + exp;
         states[id].ttl = 0;
 
-        emit Auction(id, rev, iss, oss, iam, bid);
+        emit Auction(id, rve, iss, oss, iam, bid);
     }
 
     //  参与竞拍
