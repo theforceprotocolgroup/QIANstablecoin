@@ -1,0 +1,11 @@
+#!/usr/bin/env node
+
+const rt = require("./rt");
+
+//测试token
+rt.async_raiilock(async function() {
+    rt.log("deploy Join...");
+    const Join = await rt.rt_contract_new("Join");
+    rt.log("deploy Join at: ", Join.options.address);
+    rt.set("Join", Join.options.address);
+});

@@ -9,10 +9,7 @@
 
 pragma solidity >= 0.5.0;
 
-import "./Arith.sol";
-
-
-contract Stderc20 is Arith {
+contract Stderc20 {
     string  public name;
     string  public symbol;
     uint8   public decimals;
@@ -24,9 +21,9 @@ contract Stderc20 is Arith {
     event Transfer(address indexed from, address indexed to, uint amount);
 
     constructor(string memory n, string memory s, uint8 d, uint256 t) public {
-        name = n;
-        symbol = s;
-        decimals = d;
+        name        = n;
+        symbol      = s;
+        decimals    = d;
         totalSupply = t;
         balanceOf[msg.sender] = totalSupply;
     }
@@ -52,5 +49,15 @@ contract Stderc20 is Arith {
         allowance[msg.sender][who] = amount;
         emit Approval(msg.sender, who, amount);
         return true;
+    }
+
+    function usub(uint256 x, uint256 y) internal pure returns (uint256 z) {
+        require(x >= y);
+        z = x - y;
+    }
+
+    function uadd(uint256 x, uint256 y) internal pure returns (uint256 z) {
+        z = x + y;
+        require (z >= x);
     }
 }

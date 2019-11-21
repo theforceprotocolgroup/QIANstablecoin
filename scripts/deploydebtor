@@ -5,31 +5,38 @@ const rt = require("./rt");
 //债务管理器
 rt.async_raiilock(async function() {
 
-    rt.log("deploy debtor...");
-    const stablecointokenaddress = rt.get("stablecoin");  //稳定币合约       
-    rt.log("get stablecoin: ", stablecointokenaddress);
+    rt.log("deploy Debtor...");
+    const deployedStablecoin = rt.get("Stablecoin");  //稳定币合约       
+    rt.log("get Stablecoin: ", deployedStablecoin);
 
-    const govtokenaddress = rt.get("govtoken");
-    rt.log("get govtoken: ", govtokenaddress);
+    const govtoken = rt.configure().govtoken.address;
+    rt.log("get rt.configure().govtoken: ", govtoken);
 
-    const debtor = await rt.rt_contract_new("debtor", stablecointokenaddress, govtokenaddress);
-    rt.log("deploy debtor at: ", debtor.options.address);
-    
-    const debtoraddress = debtor.options.address;
-    const stablecoin = await rt.rt_contract_at("stablecoin", stablecointokenaddress);
+    const wet = rt.get("Wallet");
+    rt.log("get Wallet: ", wet);
+
+    const Govtoken = rt.get("Govtoken");
+    rt.log("get Govtoken: ", Govtoken);
+
+    const Debtor = await rt.rt_contract_new("Debtor", wet, deployedStablecoin, Govtoken);
+    rt.log("deploy Debtor at: ", Debtor.options.address);
+
+    const debtorAddress = Debtor.options.address;
     let tx;
 
     //授权
 
-    rt.log(`stablecoin.methods.enable: debtor => stablecoin.mint`);
+    const Stablecoin = rt.rt_contract_at("Stablecoin", deployedStablecoin);
+    
+    rt.log(`Stablecoin.methods.enable: Debtor => Stablecoin.mint`);
     const stablecoin_mint_sig = rt.web3().eth.abi.encodeFunctionSignature('mint(address,uint256)');
-    tx = stablecoin.methods.enable(debtoraddress, stablecoin_mint_sig);
-    await rt.send(tx, stablecointokenaddress);
+    tx = Stablecoin.methods.enable(debtorAddress, stablecoin_mint_sig);
+    await rt.send(tx, deployedStablecoin);
 
-    rt.log(`stablecoin.methods.enable: debtor => stablecoin.burn`);
+    rt.log(`Stablecoin.methods.enable: Debtor => Stablecoin.burn`);
     const stablecoin_burn_sig = rt.web3().eth.abi.encodeFunctionSignature('burn(address,uint256)');
-    tx = stablecoin.methods.enable(debtoraddress, stablecoin_burn_sig);
-    await rt.send(tx, stablecointokenaddress);
-
-    rt.set("debtor", debtoraddress);
+    tx = Stablecoin.methods.enable(debtorAddress, stablecoin_burn_sig);
+    await rt.send(tx, deployedStablecoin);
+    
+    rt.set("Debtor", debtorAddress);
 });

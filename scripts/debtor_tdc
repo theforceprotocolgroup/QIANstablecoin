@@ -3,12 +3,9 @@
 const rt = require("./rt");
 
 rt.async_raiilock(async function() {
-
-    rt.log(`execute 'settdc' for debtor`);
     
-    const debtoraddress = rt.get("debtor");
-    rt.assert(debtoraddress, `undeployed debtor`);
-    rt.log("get deployed debtor:", debtoraddress);
+    const debtorAddress = rt.get("Debtor");
+    rt.log("get Debtor:", debtorAddress);
 
     const configure = rt.configure()['government']['debtor'];
     rt.assert(configure, `no get 'government.debtor'`);
@@ -18,9 +15,9 @@ rt.async_raiilock(async function() {
     rt.log(`get 'government.debtor.tdc': `, tdc);
 
     tdc = rt.web3().utils.toWei(tdc.toString(), 'ether').toString();
-    rt.log("debtor.methods.settdc: ", tdc);
+    rt.log("Debtor.methods.settdc: ", tdc);
     
-    let debtor = await rt.rt_contract_at("debtor", debtoraddress);
-    const tx = debtor.methods.settdc(tdc);
-    await rt.send(tx, debtoraddress);
+    let Debtor = await rt.rt_contract_at("Debtor", debtorAddress);
+    const tx = Debtor.methods.settdc(tdc);
+    await rt.send(tx, debtorAddress);
 });

@@ -5,14 +5,14 @@ const rt = require("./rt");
 //喂价器
 rt.async_raiilock(async function() {
     const value = {};
-    const ctokens = rt.getctokens();
-    for(let i = 0; i < ctokens.length; ++i) {
-        const symbol = ctokens[i].symbol.toUpperCase();
-        rt.log(`deploy feeder(${symbol})...`);
-        const feeder = await rt.rt_contract_new("feeder");
-        rt.log(`deploy feeder(${symbol}) at: `, feeder.options.address);
+    const tokens = rt.gettokens();
+    for(let i = 0; i < tokens.length; ++i) {
+        const symbol = tokens[i].symbol.toUpperCase();
+        rt.log(`deploy Feeder(${symbol})...`);
+        const Feeder = await rt.rt_contract_new("Feeder");
+        rt.log(`deploy Feeder(${symbol}) at: `, Feeder.options.address);
 
-        value[symbol] = feeder.options.address;
+        value[symbol] = Feeder.options.address;
     }
-    rt.set("feeder", value);
+    rt.set("Feeder", value);
 });

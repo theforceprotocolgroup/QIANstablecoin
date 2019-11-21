@@ -6,7 +6,6 @@ pragma solidity >= 0.5.0;
 
 import "./Authority.sol";
 
-
 contract Feeder is Authority {
 
     uint256  public pce;
