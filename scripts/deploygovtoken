@@ -6,7 +6,7 @@ const rt = require("./rt");
 rt.async_raiilock(async function() {
     rt.log("deploy Govtoken...");
     //{symbol: "FOR", address: "0x..."}
-    const fortoken = rt.find_govtoken();
+    const fortoken = rt.configure().govtoken;
     rt.assert(fortoken, "not find 'FOR' token address");
     rt.log("find 'FOR' token: ", fortoken);
     const Govtoken = await rt.rt_contract_new("Govtoken", fortoken.address);

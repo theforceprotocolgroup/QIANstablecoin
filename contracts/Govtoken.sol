@@ -40,6 +40,10 @@ contract Govtoken is Authority {
         hea = true;
     }
 
+    function settok(address v) public auth {
+        tok = Fortoken(v);
+    }
+
     //当系统停止后由owner调用, 设置 @hea = false, 将允许捐助者按捐助数量占总捐助数量的比例取回相应的代币.
     function end() public auth {
         hea = false;

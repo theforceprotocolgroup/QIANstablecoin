@@ -3,29 +3,22 @@
 const rt = require("./rt");
 
 rt.async_raiilock(async function () {
+    const token = rt.argv().module;
+    rt.assert(token, "no pass option: -m | --module");
 
     const deployedCollateral = rt.get("Collateral");
     rt.log("get Collateral:", JSON.stringify(deployedCollateral, null, 4));
 
-    const tokens = rt.gettokens();
-    for (let i = 0; i < tokens.length; ++i) {
-        const token = tokens[i].symbol;
+    const collateraladdress = deployedCollateral && deployedCollateral[token];
+    rt.assert(collateraladdress, `not find collateral(${token})`);
 
-        const collateraladdress = deployedCollateral && deployedCollateral[token];
-        rt.assert(collateraladdress, `not find collateral(${token})`);
+    let seg = rt.configure().tokens[token].init.seg;
+    rt.log(`get 'tokens[${token}].init.seg': `, seg);
 
-        const configure = rt.configure()['government']['collateral'][token];
-        rt.assert(configure, `no get 'government.collateral.${token}'`);
+    seg = rt.web3().utils.toWei(seg.toString(), 'ether').toString();
+    rt.log(`Collateral.methods.setseg(seg = ${seg})`);
 
-        let seg = configure.seg;
-        rt.assert(seg == 0 || seg, `no get 'government.collateral.${token}.seg'`);
-        rt.log(`get 'government.collateral.${token}.seg': `, seg);
-
-        seg = rt.web3().utils.toWei(seg.toString(), 'ether').toString();
-        rt.log(`Collateral.methods.setseg(seg = ${seg})`);
-
-        let Collateral = await rt.rt_contract_at("Collateral", collateraladdress);
-        const tx = Collateral.methods.setseg(seg);
-        await rt.send(tx, collateraladdress);
-    }
+    let Collateral = await rt.rt_contract_at("Collateral", collateraladdress);
+    const tx = Collateral.methods.setseg(seg);
+    await rt.send(tx, collateraladdress);
 });

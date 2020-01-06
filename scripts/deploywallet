@@ -10,11 +10,11 @@ rt.async_raiilock(async function() {
     rt.log(`deploy Wallet at: `, Wallet.options.address);
     const walletAddress = Wallet.options.address;
 
-    rt.set(`Wallet`, walletAddress);
+    const tokens = rt.configure().tokens;
+    const symbols = Object.keys(tokens);
 
-    const tokens = rt.gettokens();
-    for(let i = 0; i < tokens.length; ++i) {
-        const address = tokens[i].address;
+    for(const symbol of symbols) {
+        const address = tokens[symbol].address;
         rt.log(`Wallet.create(address = ${address}`);
         const tx = Wallet.methods.create(address);
         await rt.send(tx, walletAddress);
@@ -30,4 +30,6 @@ rt.async_raiilock(async function() {
     rt.log("get Govtoken: ", Govtoken);
     tx = Wallet.methods.join(Govtoken);
     await rt.send(tx, walletAddress);
+
+    rt.set(`Wallet`, walletAddress);
 });

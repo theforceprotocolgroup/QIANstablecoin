@@ -5,14 +5,13 @@
 	# EXPORTS 导出环境变量, 用于传递给部署脚本使用.
 	# SOLC solidity 编译器
 	# OUTPUT_DIR 部署输出文件
+	# OPTSIONS 调用参数
 
 CC := $(SOLC)
 
-modules = Join Stablecoin Govtoken Wallet Liquidauction Debtauction Govauction Feeder Debtor Collateral Forward
+modules = Index Stablecoin Govtoken Wallet Feeder Debtor Collateral Forward
 
 SOLCBUILD = $(CC) -o $(BUILD_DIR) $< || exit 1
-
-VPATH = $(OUTPUT_DIR)
 
 vpath %.abi $(BUILD_DIR)
 vpath %.bin $(BUILD_DIR)
@@ -22,74 +21,59 @@ vpath %.sol $(SOURCE_DIR)
 all: $(modules)
 	$(SCRIPT_DIR)/export
 
-Join : Join.bin Join.abi
-	$(SCRIPT_DIR)/deployjoin || exit 1
-Join.bin Join.abi: Join.sol Authority.sol
+$(OUTPUT_DIR)/Index : Index.bin Index.abi
+	$(SCRIPT_DIR)/deployindex || exit 1
+Index.bin Index.abi: Index.sol Authority.sol
 	$(SOLCBUILD)
 
-Govtoken : Govtoken.bin Govtoken.abi
+$(OUTPUT_DIR)/Govtoken : Govtoken.bin Govtoken.abi
 	$(SCRIPT_DIR)/deploygovtoken || exit 1
 Govtoken.bin Govtoken.abi: Govtoken.sol Authority.sol
 	$(SOLCBUILD)
 
-Stablecoin : Stablecoin.bin Stablecoin.abi
-	$(SCRIPT_DIR)/deploystablecoin || exit 1
+$(OUTPUT_DIR)/Stablecoin : Stablecoin.bin Stablecoin.abi
+
 Stablecoin.bin Stablecoin.abi: Stablecoin.sol Stderc20.sol Authority.sol
 	$(SOLCBUILD)
 
-Wallet: Wallet.bin Wallet.abi
+$(OUTPUT_DIR)/Wallet: Wallet.bin Wallet.abi
 	$(SCRIPT_DIR)/deploywallet || exit 1
 Wallet.bin Wallet.abi: Wallet.sol Asset.sol Authority.sol
 	$(SOLCBUILD)
 
-Debtauction: Debtauction.bin Debtauction.abi Wallet
-	$(SCRIPT_DIR)/deploydebtauction || exit 1
-Debtauction.bin Debtauction.abi: Debtauction.sol
-	$(SOLCBUILD)
-
-Liquidauction: Liquidauction.bin Liquidauction.abi Wallet
-	$(SCRIPT_DIR)/deployliquidauction || exit 1
-Liquidauction.bin Liquidauction.abi: Liquidauction.sol
-	$(SOLCBUILD)
-
-Govauction: Govauction.bin Govauction.abi Wallet
-	$(SCRIPT_DIR)/deploygovauction || exit 1
-Govauction.bin Govauction.abi: Govauction.sol
-	$(SOLCBUILD)
-
-Feeder : Feeder.bin Feeder.abi
-	$(SCRIPT_DIR)/deployfeeder || exit 1
-	$(SCRIPT_DIR)/feeder_set || exit 1
+$(OUTPUT_DIR)/Feeder : Feeder.bin Feeder.abi
+	$(SCRIPT_DIR)/deployfeeder $(OPTSIONS) || exit 1
+	# $(SCRIPT_DIR)/feeder_set || exit 1
 Feeder.bin Feeder.abi: Feeder.sol Authority.sol
 	$(SOLCBUILD)
 
-Debtor : Debtor.bin Debtor.abi Stablecoin
+$(OUTPUT_DIR)/Debtor : Debtor.bin Debtor.abi
 	$(SCRIPT_DIR)/deploydebtor || exit 1
 	$(SCRIPT_DIR)/debtor_tdc || exit 1
 	# 仅为测试部署时授权
-	$(SCRIPT_DIR)/stablecoin_approve_debtor || exit 1
+	# $(SCRIPT_DIR)/stablecoin_approve_debtor || exit 1
 Debtor.bin Debtor.abi: Debtor.sol Authority.sol
 	$(SOLCBUILD)
 
-Collateral: Collateral.bin Collateral.abi Debtor Wallet Liquidauction Join
-	$(SCRIPT_DIR)/deploycollateral || exit 1
-	$(SCRIPT_DIR)/collateral_setfer || exit 1
-	$(SCRIPT_DIR)/collateral_setupp || exit 1
-	$(SCRIPT_DIR)/collateral_setlow || exit 1
-	$(SCRIPT_DIR)/collateral_setove || exit 1
-	$(SCRIPT_DIR)/collateral_setseg || exit 1
-	$(SCRIPT_DIR)/collateral_setgth || exit 1
-	$(SCRIPT_DIR)/collateral_setfin || exit 1
-	$(SCRIPT_DIR)/collateral_feed || exit 1
+$(OUTPUT_DIR)/Collateral: Collateral.bin Collateral.abi Debtor Wallet Index
+	$(SCRIPT_DIR)/deploycollateral $(OPTSIONS) || exit 1
+	$(SCRIPT_DIR)/collateral_setfer $(OPTSIONS) || exit 1
+	$(SCRIPT_DIR)/collateral_setupp $(OPTSIONS) || exit 1
+	$(SCRIPT_DIR)/collateral_setlow $(OPTSIONS) || exit 1
+	$(SCRIPT_DIR)/collateral_setove $(OPTSIONS) || exit 1
+	$(SCRIPT_DIR)/collateral_setseg $(OPTSIONS) || exit 1
+	$(SCRIPT_DIR)/collateral_setgth $(OPTSIONS) || exit 1
+	$(SCRIPT_DIR)/collateral_setfin $(OPTSIONS) || exit 1
+	# $(SCRIPT_DIR)/collateral_feed $(OPTSIONS) || exit 1
 Collateral.bin Collateral.abi: Collateral.sol Authority.sol
 	$(SOLCBUILD)
 
 # 需要通过 token.approve 对新部署的forward授权
 
-Forward: Forward.bin Forward.abi Collateral
+$(OUTPUT_DIR)/Forward: Forward.bin Forward.abi Collateral
 	$(SCRIPT_DIR)/deployforward || exit 1
 	# 仅为测试部署时授权.
-	$(SCRIPT_DIR)/testoken_approve_forward || exit 1 
+	# $(SCRIPT_DIR)/testoken_approve_forward || exit 1 
 Forward.bin Forward.abi: Forward.sol
 	$(SOLCBUILD)
 

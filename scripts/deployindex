@@ -1,0 +1,11 @@
+#!/usr/bin/env node
+
+const rt = require("./rt");
+
+//测试token
+rt.async_raiilock(async function() {
+    rt.log("deploy Index...");
+    const Index = await rt.rt_contract_new("Index");
+    rt.log("deploy Index at: ", Index.options.address);
+    rt.set("Index", Index.options.address);
+});

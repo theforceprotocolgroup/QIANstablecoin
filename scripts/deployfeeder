@@ -4,15 +4,17 @@ const rt = require("./rt");
 
 //喂价器
 rt.async_raiilock(async function() {
-    const value = {};
-    const tokens = rt.gettokens();
-    for(let i = 0; i < tokens.length; ++i) {
-        const symbol = tokens[i].symbol.toUpperCase();
-        rt.log(`deploy Feeder(${symbol})...`);
-        const Feeder = await rt.rt_contract_new("Feeder");
-        rt.log(`deploy Feeder(${symbol}) at: `, Feeder.options.address);
+    const symbol = rt.argv().module;
+    rt.assert(symbol, "no pass option: -m | --module");
 
-        value[symbol] = Feeder.options.address;
-    }
+    rt.log(`deploy Feeder(${symbol})...`);
+
+    const value = rt.get('Feeder') || {};
+    rt.log("get Feeder: ", value);
+
+    const Feeder = await rt.rt_contract_new("Feeder");
+    rt.log(`deploy Feeder(${symbol}) at: `, Feeder.options.address);
+
+    value[symbol] = Feeder.options.address;
     rt.set("Feeder", value);
 });

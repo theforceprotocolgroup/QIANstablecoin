@@ -12,7 +12,7 @@ contract Authority
 {
     IAuthority public next;          //指向其他任何 @IAuthority, 只要实现了 @accessible 方法, 构成权限检查链.
     uint8 countofowners;
-    mapping(address => bool) owners;    //管理员权限
+    mapping(address => bool) public owners;    //管理员权限
     address public pendingowner;       //
     mapping(address => mapping(address => mapping(bytes4 => bool))) acl;    //访问控制列表
 
@@ -51,6 +51,7 @@ contract Authority
     function confirmowner() public auth {
         require(msg.sender == pendingowner, "confirmowner: not pending owner");
         owners[msg.sender] = true;
+        pendingowner = address(0);
     }
     
     //取消 @who 的owner权限.

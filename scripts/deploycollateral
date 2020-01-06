@@ -3,8 +3,12 @@
 const rt = require("./rt");
 
 rt.async_raiilock(async function() {
-    const value = {};
-    
+    const symbol = rt.argv().module;
+    rt.assert(symbol, "no pass option: -m | --module");
+    const at = rt.configure().tokens[symbol].address;
+
+    rt.log(`deploy Collateral(${symbol})...`);
+
     const dor = rt.get("Debtor");
     rt.log("get Debtor: ", dor);
 
@@ -14,59 +18,55 @@ rt.async_raiilock(async function() {
     const lau = rt.get("Liquidauction");
     rt.log('get Liquidauction:', lau);
 
-    const jin = rt.get("Join");
-    rt.log("get Join: ", jin);
+    const idx = rt.get("Index");
+    rt.log("get Index: ", idx);
+
+    const value = rt.get('Collateral') || {};
+    rt.log("get Collateral: ", value);
 
     const Debtor = await rt.rt_contract_at("Debtor", dor);
-    const Join = await rt.rt_contract_at("Join", jin);
+    const Index = await rt.rt_contract_at("Index", idx);
 
-    const tokens = rt.gettokens();
-    for(let i = 0; i < tokens.length; ++i) {
-        const symbol = tokens[i].symbol.toUpperCase();
-        const address = tokens[i].address;
+    const Collateral = await rt.rt_contract_new("Collateral", wet, at, dor, lau, jin);
+    rt.log(`deploy Collateral(${symbol}) at: `, Collateral.options.address);
 
-        rt.log(`deploy Collateral(${symbol})...`);
-
-        const Collateral = await rt.rt_contract_new("Collateral", wet, address, dor, lau, jin);
-        rt.log(`deploy Collateral(${symbol}) at: `, Collateral.options.address);
-
-        //授权
-        let tx;
-        
-        const collateralAddress = Collateral.options.address;
-
-        rt.log(`Debtor.methods.enable: Collateral => Debtor.incinterest`);
-        const debtor_incinterest_sig = rt.web3().eth.abi.encodeFunctionSignature('inci(uint256)');
-        tx = Debtor.methods.enable(collateralAddress, debtor_incinterest_sig);
-        await rt.send(tx, dor);
+    //授权
+    let tx;
     
-        rt.log(`Debtor.methods.enable: Collateral => Debtor.decinterest`);
-        const debtor_decinterest_sig = rt.web3().eth.abi.encodeFunctionSignature('deci(uint256)');
-        tx = Debtor.methods.enable(collateralAddress, debtor_decinterest_sig);
-        await rt.send(tx, dor);
-    
-        rt.log(`Debtor.methods.enable: Collateral => Debtor.incbaddebt`);
-        const debtor_incbaddebt_sig = rt.web3().eth.abi.encodeFunctionSignature('incb(uint256)');
-        tx = Debtor.methods.enable(collateralAddress, debtor_incbaddebt_sig);
-        await rt.send(tx, dor);
-    
-        rt.log(`Debtor.methods.enable: Collateral => Debtor.burn`);
-        const debtor_burn_sig = rt.web3().eth.abi.encodeFunctionSignature('burn(address,uint256)');
-        tx = Debtor.methods.enable(collateralAddress, debtor_burn_sig);
-        await rt.send(tx, dor);
-    
-        rt.log(`Debtor.methods.enable: Collateral => Debtor.mint`);
-        const debtor_mint_sig = rt.web3().eth.abi.encodeFunctionSignature('mint(address,uint256)');
-        tx = Debtor.methods.enable(collateralAddress, debtor_mint_sig);
-        await rt.send(tx, dor);
+    const collateralAddress = Collateral.options.address;
 
-        rt.log(`Join.methods.enable: Collateral => Join.join`);
-        const join_join_sig = rt.web3().eth.abi.encodeFunctionSignature('join(address)');
-        tx = Join.methods.enable(collateralAddress, join_join_sig);
-        await rt.send(tx, jin);
+    rt.log(`Debtor.methods.enable: Collateral => Debtor.incinterest`);
+    const debtor_incinterest_sig = rt.web3().eth.abi.encodeFunctionSignature('inci(uint256)');
+    tx = Debtor.methods.enable(collateralAddress, debtor_incinterest_sig);
+    await rt.send(tx, dor);
 
-        value[symbol] = collateralAddress;
-    }
+    rt.log(`Debtor.methods.enable: Collateral => Debtor.decinterest`);
+    const debtor_decinterest_sig = rt.web3().eth.abi.encodeFunctionSignature('deci(uint256)');
+    tx = Debtor.methods.enable(collateralAddress, debtor_decinterest_sig);
+    await rt.send(tx, dor);
+
+    rt.log(`Debtor.methods.enable: Collateral => Debtor.incbaddebt`);
+    const debtor_incbaddebt_sig = rt.web3().eth.abi.encodeFunctionSignature('incb(uint256)');
+    tx = Debtor.methods.enable(collateralAddress, debtor_incbaddebt_sig);
+    await rt.send(tx, dor);
+
+    rt.log(`Debtor.methods.enable: Collateral => Debtor.burn`);
+    const debtor_burn_sig = rt.web3().eth.abi.encodeFunctionSignature('burn(address,uint256)');
+    tx = Debtor.methods.enable(collateralAddress, debtor_burn_sig);
+    await rt.send(tx, dor);
+
+    rt.log(`Debtor.methods.enable: Collateral => Debtor.mint`);
+    const debtor_mint_sig = rt.web3().eth.abi.encodeFunctionSignature('mint(address,uint256)');
+    tx = Debtor.methods.enable(collateralAddress, debtor_mint_sig);
+    await rt.send(tx, dor);
+
+    rt.log(`Index.methods.enable: Collateral => Index.inc`);
+    const join_join_sig = rt.web3().eth.abi.encodeFunctionSignature('inc(address)');
+    tx = Index.methods.enable(collateralAddress, join_join_sig);
+    await rt.send(tx, idx);
+
+    value[symbol] = collateralAddress;
+
     rt.set(`Collateral`, value);
 });
 

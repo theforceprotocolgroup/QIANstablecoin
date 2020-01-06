@@ -7,12 +7,8 @@ rt.async_raiilock(async function() {
     const debtorAddress = rt.get("Debtor");
     rt.log("get Debtor:", debtorAddress);
 
-    const configure = rt.configure()['government']['debtor'];
-    rt.assert(configure, `no get 'government.debtor'`);
-
-    let tdc = configure.tdc;
-    rt.assert(tdc == 0 || tdc, `no get 'government.debtor.tdc'`);
-    rt.log(`get 'government.debtor.tdc': `, tdc);
+    let tdc = rt.configure().modules.debtor.init.tdc;
+    rt.log(`get 'modules.debtor.init.tdc': `, tdc);
 
     tdc = rt.web3().utils.toWei(tdc.toString(), 'ether').toString();
     rt.log("Debtor.methods.settdc: ", tdc);

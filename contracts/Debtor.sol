@@ -75,21 +75,22 @@ contract Debtor is Authority {
 
     /** 治理 */
     
+    function setgov(address v) public auth {
+        gov = v;
+    }
     function settdc(uint256 v) public auth {
         tdc = v;
     }
-
     function setdau(address v) public auth {
         dau = v;
     }
-
     function setgau(address v) public auth {
         gau = v;
     }
-
     function sethea(bool v) public auth {
         hea = v;
     }
+
 
     /** 稳定币管理 */
 

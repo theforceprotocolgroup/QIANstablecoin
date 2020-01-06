@@ -42,8 +42,8 @@ contract ILiquidauction {
         uint256 oam, address iss, uint256 iam, uint256 bid) public returns(uint256);
 }
 
-contract IJoined {
-    function join(address who) public returns(uint256);
+contract IIndex {
+    function inc(address who) public returns(uint256);
 }
 
 contract Collateral is Authority {
@@ -68,7 +68,9 @@ contract Collateral is Authority {
     uint256 public pce;                        //当前抵押物价格(price);
     address public wet;                        //wallet
 
-    address public jin;                        //Joined, 记录已经使用过系统的账户.
+    address public idx;                        //Index, 记录已经使用过系统的账户.
+
+    uint256 public fee;                        //年利率.
 
     /** 治理参数 */
 
@@ -88,12 +90,12 @@ contract Collateral is Authority {
     event Withdraw(address indexed sender, address indexed who, uint256 amount);
     /** 初始化 */
 
-    constructor(address w, address t, address d, address l, address j) public {
+    constructor(address w, address t, address d, address l, address i) public {
         wet = w;
         tok = t;
         dor = IDebtor(d);
         lau = l;
-        jin = j;
+        idx = i;
         hea = true;
         rit = now;
         rat = PRE;
@@ -127,6 +129,12 @@ contract Collateral is Authority {
     }
     function sethea(bool v) public auth {
         hea = v;
+    }
+    function setidx(address v) public auth {
+        idx = v;
+    }
+    function setfee(uint256 v) public auth {
+        fee = v;
     }
 
     /** 喂价 */
@@ -218,6 +226,7 @@ contract Collateral is Authority {
         uint256 ss = umul(s, rat);
         //给 @msg.sender 增发 @s * @rat 数量的稳定币
         dor.mint(u, ss);
+        IIndex(idx).inc(who);
         emit Borrow(u, s, c);
     }
 
@@ -324,11 +333,17 @@ contract Collateral is Authority {
         return umul(hol[who].s, rat);
     }
     
-    //获取账户 @who 当前的抵押率 (c * rat)/(s * rat), 返回 0 表示当前用户没有抵押物记录.
+    //获取账户 @who 当前的抵押率 (c * pce)/(s * rat), 返回 0 表示当前用户没有抵押物记录.
     function cratio(address who) public view returns (uint256) {
         uint256 s = umul(hol[who].s, rat);
         uint256 c = umul(hol[who].c, pce);
         return s == 0 ? 0 : udiv(c, s);
+    }
+
+    function liquidationprice(address who) public view returns(uint256) {
+        //r = (c * pce)/(s * rat)
+        //pce = (s * rat * r / c);
+        return udiv(umul(umul(hol[who].s, rat), ove), hol[who].c);
     }
 
     function evaluateratio(uint256 c, uint256 s) public view returns(uint256) {
@@ -387,7 +402,6 @@ contract Collateral is Authority {
             return;
         }
         require(IToken(tok).transferFrom(who, address(this), amount));
-        IJoined(jin).join(who);
         emit Deposit(msg.sender, who, amount);
     }
 
@@ -412,7 +426,7 @@ contract Collateral is Authority {
     }
 
     function pow(uint256 x, uint256 n, uint256 base) internal pure returns (uint256 z) {
-        //TODO;
+	//TODO
     }
 
     function pow(uint256 x, uint256 n) internal pure returns (uint256 z) {

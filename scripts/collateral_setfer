@@ -3,6 +3,8 @@
 const rt = require("./rt");
 
 rt.async_raiilock(async function () {
+    const token = rt.argv().module;
+    rt.assert(token, "no pass option: -m | --module");
 
     const deployedCollateral = rt.get("Collateral");
     rt.log("get Collateral:", JSON.stringify(deployedCollateral, null, 4));
@@ -10,20 +12,15 @@ rt.async_raiilock(async function () {
     const deployedFeeder = rt.get("Feeder");
     rt.log('get Feeder:', JSON.stringify(deployedFeeder, null, 4));
 
-    const tokens = rt.gettokens();
-    for (let i = 0; i < tokens.length; ++i) {
-        const token = tokens[i].symbol;
+    const collateralAddress = deployedCollateral && deployedCollateral[token];
+    rt.assert(collateralAddress, `not find Collateral(${token})`);
 
-        const collateralAddress = deployedCollateral && deployedCollateral[token];
-        rt.assert(collateralAddress, `not find Collateral(${token})`);
+    const feederaddress = deployedFeeder && deployedFeeder[token];
+    rt.assert(feederaddress, `not find Feeder(${token}`);
 
-        const feederaddress = deployedFeeder && deployedFeeder[token];
-        rt.assert(feederaddress, `not find Feeder(${token}`);
+    rt.log(`Collateral.methods.setfer(fer = ${feederaddress})`);
 
-        rt.log(`Collateral.methods.setfer(fer = ${feederaddress})`);
-
-        let Collateral = await rt.rt_contract_at("Collateral", collateralAddress);
-        const tx = Collateral.methods.setfer(feederaddress);
-        await rt.send(tx, collateralAddress);
-    }
+    let Collateral = await rt.rt_contract_at("Collateral", collateralAddress);
+    const tx = Collateral.methods.setfer(feederaddress);
+    await rt.send(tx, collateralAddress);
 });

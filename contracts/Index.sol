@@ -5,13 +5,13 @@ pragma solidity >= 0.5.0;
 
 import "./Authority.sol";
 
-contract Join is Authority {
+contract Index is Authority {
     mapping (uint256 => address) public accounts;
     mapping (address => uint256) public indexs;
 
     uint256 public index = 1;
 
-    function join(address who) public auth returns(uint256) {
+    function inc(address who) public auth returns(uint256) {
         if(indexs[who] == 0) {
             accounts[index] = who;
             indexs[who] = index;

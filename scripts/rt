@@ -11,13 +11,17 @@ process.on('unhandledRejection', (error) => {
 function rt () {
     this.rt_lock_file = process.env.PWD + "/rt.lock";
     this.rt_locked = false; //标记当前对象是否已被锁定, 保证必须是当前进程只能释放自己加的锁.
-    
+
     this.rt_yargs = yargs.option('configure', {
         alias: 'c',
         describe: 'Input configure file',
         type: 'string',
         default: process.env.RT_CONF
-    });
+    }).option('module', {
+        alias: 'm',
+        describe: 'Input module name',
+        type: 'string'
+    }).argv;
 
     this.lock = function () {
         let fd = fs.openSync(this.rt_lock_file, 'wx');
@@ -32,34 +36,36 @@ function rt () {
         }
     }
 
-    this.ensure_directory_exists = function(directory) {
+    this.ensure_directory_exists = function (directory) {
         if (fs.existsSync(directory)) {
             return;
         }
-    
+
         let parent_directory = path.dirname(directory);
         this.ensure_directory_exists(parent_directory);
-    
+
         fs.mkdirSync(directory);
     }
 
     this.rt_constructor = function () {
         try {
-            this.lock();
+            //为了同时执行 loopfeed-ethmain, loopfeed-rskmain, 所以这里就不再加锁独占执行.
+            //this.lock();
             this.rt_err = null;
-            this.rt_configure_file = this.rt_yargs.argv.configure;
+            this.rt_configure_file = this.rt_yargs.configure;
             this.assert(this.rt_configure_file, "no configure file");
             this.log("use configure file:", this.rt_configure_file);
             this.rt_conf = require(this.rt_configure_file);
             this.assert(this.rt_conf, "bad require");
             this.rt_output_directory = this.rt_conf.rt_output_directory;
             this.rt_build_directory = this.rt_conf.rt_build_directory;
-            this.rt_prik = process.env.RT_PRIK;
-            this.assert(this.rt_prik, "not find env 'RT_PRIK' ");
             this.rt_provider = this.rt_conf.rt_provider;
             this.rt_web3 = new web3(new web3.providers.HttpProvider(this.rt_provider));
             this.rt_deployed = [];
             this.ensure_directory_exists(this.rt_output_directory);
+            this.gasprice = 0;
+            this.rt_prik = process.env.RT_PRIK || this.dekeystore();
+            this.assert(this.rt_prik, "not find env 'RT_PRIK' or de-keystore");
         } catch (e) {
             this.rt_err = e;
             this.rt_destructor();
@@ -67,19 +73,63 @@ function rt () {
 
         return this;
     }
+
+    this.nowdate = function () {
+        return new Date().toLocaleString();
+    }
+
+    this.now = function () {
+        return Date.parse(new Date()) / 1000;
+    }
+
+    //@after second.
+    this.afterdate = function (after) {
+        const now = Date.parse(new Date()) / 1000;
+        after = after + now;
+        after = after * 1000;   //to ms;
+        var datetime = new Date();
+        datetime.setTime(after);
+        var year = datetime.getFullYear();
+        var month = datetime.getMonth() + 1;
+        var date = datetime.getDate();
+        var hour = datetime.getHours();
+        var minute = datetime.getMinutes();
+        var second = datetime.getSeconds();
+        return year + "-" + month + "-" + date + " " + hour + ":" + minute + ":" + second;
+    }
+
+    this.dekeystore = function () {
+        const pwd = process.env.RT_KEYSTORE_PASSWORD;
+        if (!pwd) {
+            this.log("not find env 'RT_KEYSTORE_PASSWORD");
+            return null;
+        }
+
+        const keystorepath = process.env.RT_KEYSTORE_PATH;
+        if (!keystorepath) {
+            this.log("not find env 'RT_KEYSTORE_PATH");
+            return null;
+        }
+
+        const keystoretext = fs.readFileSync(keystorepath, 'utf8');
+        const keystore = JSON.parse(keystoretext.trim());
+        const output = this.rt_web3.eth.accounts.decrypt(keystore, pwd);
+        return output.privateKey;
+    }
+
     this.rt_destructor = function (cb) {
-        try { this.unlock(); } catch (e) { }
+        //try { this.unlock(); } catch (e) { }
 
         cb = cb || function (e) {
             if (e) throw e;
         }
 
-        if(this.rt_err) {
+        if (this.rt_err) {
             cb(this.rt_err);
         } else {
-            for(let i = 0; i < this.rt_deployed.length; ++i) {
-                fs.writeFileSync(`${this.rt_output_directory}/${this.rt_deployed[i].name}`, 
-                    JSON.stringify({[this.rt_deployed[i].name] : this.rt_deployed[i].value}));
+            for (let i = 0; i < this.rt_deployed.length; ++i) {
+                fs.writeFileSync(`${this.rt_output_directory}/${this.rt_deployed[i].name}`,
+                    JSON.stringify({ [this.rt_deployed[i].name]: this.rt_deployed[i].value }));
             }
         }
     }
@@ -95,43 +145,73 @@ function rt () {
         }
     }
 
+    this.setgasprice = function (v) {
+        this.gasprice = v;
+    }
+
     this.get = function (name) {
-        return JSON.parse(this.require(`${this.rt_output_directory}/${name}`))[name];
+        const content = this.require(`${this.rt_output_directory}/${name}`);
+        return content && JSON.parse(content)[name];
     }
 
     this.set = function (name, value) {
-        this.rt_deployed.push({name: name, value: value});
+        this.rt_deployed.push({ name: name, value: value });
     }
 
-    this.web3 = function() {
+    this.web3 = function () {
         return this.rt_web3;
     }
 
-    this.yargs = function() {
+    this.argv = function () {
         return this.rt_yargs;
     }
 
-    this.configure = function() {
+    this.configure = function () {
         return this.rt_conf;
     }
 
+    this.openlogtofile = function (logfile) {
+        this.rt_log_directory = this.rt_conf.rt_log_directory;
+        this.ensure_directory_exists(this.rt_log_directory);
+        this.rt_log_filename = logfile || "a";
+    }
+
+    this.closelogtofile = function () {
+        this.rt_log_directory = null;
+    }
+
     this.log = function (...args) {
-        console.log(...args);
+        if (this.rt_log_directory) {
+            const msgs = [].slice.apply(args);
+            let result = `${this.nowdate()}: `;
+            msgs.forEach(function (msg) {
+                result += msg;
+            });
+            result += '\n';
+            fs.appendFileSync(`${this.rt_log_directory}/${this.rt_log_filename}.info.log`, result);
+        } else {
+            console.log(...args);
+        }
+    }
+    this.error = function (...args) {
+        if (this.rt_log_directory) {
+            const msgs = [].slice.apply(args);
+            let result = `${this.nowdate()}: `;
+            msgs.forEach(function (msg) {
+                result += msg;
+            });
+            result += '\n';
+            fs.appendFileSync(`${this.rt_log_directory}/${this.rt_log_filename}.error.log`, result);
+        } else {
+            console.error(...args);
+        }
     }
 
     this.assert = function (is, msg) {
         if (!is) throw new Error(msg);
     }
 
-    this.gettokens = function () {
-        return this.rt_conf.tokens;
-    }
-
-    this.find_govtoken = function() {
-        return this.rt_conf.govtoken;
-    }
-
-    this.owner = function() {
+    this.owner = function () {
         return this.rt_web3.eth.accounts.privateKeyToAccount(this.rt_prik).address;
     }
 
@@ -149,11 +229,15 @@ function rt () {
             }
         }
 
+        if(!fs.existsSync(dst)) {
+            return undefined;
+        }
+
         const extname = path.extname(dst);
         const load = this.rt_require_loaders[extname] || function (file) {
             return fs.readFileSync(file, "utf8");
         }
-        
+
         return load(dst);
     }
 
@@ -173,19 +257,29 @@ function rt () {
         return new this.rt_web3.eth.Contract(abi, receipt.contractAddress)
     }
 
-    this.send = async function(tx, to) {
+    this.send = async function (tx, to) {
         const data = tx.encodeABI();
-        //this.log("data: ", data);
+        this.log("data: ", data);
 
         const account = this.rt_web3.eth.accounts.privateKeyToAccount(this.rt_prik);
-        //this.log("account: ", account);
+        this.log("account: ", account.address);
 
-        const gas = await tx.estimateGas({from: account.address});
-        //this.log("gas: ", gas);
+        const gas = await tx.estimateGas({ from: account.address });
+        this.log("gasLimit: ", gas);
+
+        let gasPrice = await this.rt_web3.eth.getGasPrice();
+        //const gasPrice = 6000000000;
+
+        gasPrice = Math.max(this.gasprice, gasPrice);
+        this.log("gasPrice: ", gasPrice);
+
+        const balance = await this.rt_web3.eth.getBalance(account.address);
+        this.log("balance: ", balance);
 
         const stx = await this.rt_web3.eth.accounts.signTransaction({
             data: data,
             gas: gas,
+            gasPrice: gasPrice,
             to: to
         }, this.rt_prik);
         //this.log("stx: ", stx);
@@ -208,7 +302,7 @@ function rt () {
         });
     }
 
-    this.export = function(output) {
+    this.export = function (output) {
         const exports = {};
         let _this = this;
         fs.readdir(this.rt_output_directory, function (err, files) {

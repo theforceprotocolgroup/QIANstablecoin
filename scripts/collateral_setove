@@ -3,29 +3,23 @@
 const rt = require("./rt");
 
 rt.async_raiilock(async function () {
+    const token = rt.argv().module;
+    rt.assert(token, "no pass option: -m | --module");
 
     const deployedCollateral = rt.get("Collateral");
     rt.log("get Collateral:", JSON.stringify(deployedCollateral, null, 4));
 
-    const tokens = rt.gettokens();
-    for (let i = 0; i < tokens.length; ++i) {
-        const token = tokens[i].symbol;
+    const collateralAddress = deployedCollateral && deployedCollateral[token];
+    rt.assert(collateralAddress, `not find Collateral(${token})`);
 
-        const collateralAddress = deployedCollateral && deployedCollateral[token];
-        rt.assert(collateralAddress, `not find Collateral(${token})`);
+    let ove = rt.configure().tokens[token].init.ove;
+    rt.log(`get 'tokens[${token}].init.ove': `, ove);
 
-        const configure = rt.configure()['government']['collateral'][token];
-        rt.assert(configure, `no get 'government.collateral.${token}'`);
+    ove = ove / 100;
+    ove = rt.web3().utils.toWei(ove.toString(), 'ether').toString();
+    rt.log(`Collateral.methods.setove(ove = ${ove})`);
 
-        let ove = configure.ove;
-        rt.assert(ove == 0 || ove, `no get 'government.collateral.${token}.ove'`);
-        rt.log(`get 'government.collateral.${token}.ove': `, ove);
-        ove = ove / 100;
-        ove = rt.web3().utils.toWei(ove.toString(), 'ether').toString();
-        rt.log(`Collateral.methods.setove(ove = ${ove})`);
-
-        let Collateral = await rt.rt_contract_at("Collateral", collateralAddress);
-        const tx = Collateral.methods.setove(ove);
-        await rt.send(tx, collateralAddress);
-    }
+    let Collateral = await rt.rt_contract_at("Collateral", collateralAddress);
+    const tx = Collateral.methods.setove(ove);
+    await rt.send(tx, collateralAddress);
 });

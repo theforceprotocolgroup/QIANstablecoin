@@ -4,6 +4,9 @@ const rt = require("./rt");
 
 //债务管理器
 rt.async_raiilock(async function() {
+    const symbol = rt.argv().module;
+    rt.assert(symbol, "no pass option: -m | --module");
+    
     rt.log("deploy Forward...");
 
     const Forward = await rt.rt_contract_new("Forward");
@@ -12,10 +15,9 @@ rt.async_raiilock(async function() {
     const deployedCollateral = rt.get("Collateral");
     rt.log("get Collateral: ", deployedCollateral);
 
-    const tokens = rt.gettokens();
-    for(let i = 0; i < tokens.length; ++i) {
-        const symbol = tokens[i].symbol.toUpperCase();
-        
+    const keys = Object.keys(deployedCollateral);
+    
+    for(const symbol of keys) {
         const collateralAddress = deployedCollateral && deployedCollateral[symbol];
         rt.log("get Collateral address: ", collateralAddress);
 

@@ -3,29 +3,23 @@
 const rt = require("./rt");
 
 rt.async_raiilock(async function() {
+    const token = rt.argv().module;
+    rt.assert(token, "no pass option: -m | --module");
+
     const deployedFeeder = rt.get("Feeder");
     rt.log('get Feeder:', JSON.stringify(deployedFeeder, null, 4));
 
-    const tokens = rt.gettokens();
-    for(let i = 0; i < tokens.length; ++i) {
-        const token = tokens[i].symbol;
-
-        const feederAddress = deployedFeeder && deployedFeeder[token];
-        rt.assert(feederAddress, `not find Feeder(${token}`);
-        let Feeder = await rt.rt_contract_at("Feeder", feederAddress);
-        
-        const configure = rt.configure()['government']['feeder'][token];
-        rt.assert(configure, `no get 'government.Feeder.${token}'`);
+    const feederAddress = deployedFeeder && deployedFeeder[token];
+    rt.assert(feederAddress, `not find Feeder(${token}`);
+    let Feeder = await rt.rt_contract_at("Feeder", feederAddress);
     
-        const pce = configure.pce;
-        rt.assert(pce == 0 || pce, `no get 'government.feeder.${token}.pce'`);
-        rt.log(`get 'government.feeder.${token}.pce': `, pce);
-        
-        const val = rt.web3().utils.toWei(String(pce)).toString();
-        const exp = String(360000);
-        rt.log(`Feeder.set(val = ${val}, exp = ${exp})`);
+    const pce = rt.configure().mock.feeder[token].init.pce;
+    rt.log(`get 'mock.feeder[${token}].pce': `, pce);
+    
+    const val = rt.web3().utils.toWei(String(pce)).toString();
+    const exp = String(360000);
+    rt.log(`Feeder.set(val = ${val}, exp = ${exp})`);
 
-        const tx = Feeder.methods.set(val, exp);
-        await rt.send(tx, feederAddress);
-    }
+    const tx = Feeder.methods.set(val, exp);
+    await rt.send(tx, feederAddress);
 });
