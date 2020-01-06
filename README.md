@@ -1,6 +1,6 @@
 # QIAN Stablecoin system, powered by The Force Protocol
 
-# 原力协议稳定币项目——QIAN
+# The Force Protocol稳定币项目——QIAN
 
 ## I. Introduction
 
@@ -28,7 +28,7 @@ In order to achieve such a vision, relying on the open-source framework of The F
 
 ## 一、前言
 
-只要有信用，每个人都可以创造货币。
+除了卖出，加密资产还能通过质押获取流动性。
 
 QIAN旨在搭建一个全球性的，门槛极低的，人人皆可参与创造，人人皆可参与流通的去中心化稳定币生态系统。
 
@@ -48,7 +48,7 @@ QIAN旨在搭建一个全球性的，门槛极低的，人人皆可参与创造�
 
 我们相信，一定存在另外的一种形式，不管是国际商业巨头，还是芸芸众生，只要能够证明自己的信用，就可以平等、自由、便捷地参与到货币的创造中来，在一个开放、包容和透明的生态系统中享受无差别和无歧视的金融服务。而这，正体现了区块链的本质和精髓。
 
-为了这样的愿景，依托原力协议开源框架，原力协议正式启动稳定币项目——“QIAN”。
+为了这样的愿景，依托The Force Protocol开源框架，The Force Protocol正式启动稳定币项目——“QIAN”。
 
 ## II. Introduction of QIAN
 
@@ -95,10 +95,10 @@ In the blockchain world, token is a direct manifestation of credit. Therefore, t
 ### 2. QIAN的基本要点
 
 + QIAN 以加密资产为底层支持资产；
-+ QIAN 在初始将与美元保持 1:1 的汇率，未来将可能发行与欧元、日元、人民币、Libra等国际主流货币 1:1 汇率的版本；
++ QIAN 在初始将与美元保持 1:1 的汇率，未来将可能发行与其他国际主流货币 1:1 汇率的版本；
 + QIAN 系统优先在比特币 RSK 侧链和以太坊上实现，后续将基于主流跨链架构进行升级；
 + QIAN 系统致力最终于实行完全去中心化运作，但这将是一个渐进的过程；
-+ QIAN 系统基于原力协议开源框架开发，是原力协议生态系统的一部分。
++ QIAN 系统基于The Force Protocol开源框架开发，是The Force Protocol生态系统的一部分。
 
 ### 3. 稳定机制
 
@@ -110,9 +110,9 @@ In the blockchain world, token is a direct manifestation of credit. Therefore, t
 
 ### 4. QIAN 系统的两种 token
 
-**QIAN**：同“钱”，同时，在《易经》当中，乾卦代表天，代表宇宙万物运转的规律，是最崇高的正向能量和精神，遵循这两个重要的涵义，我们将比特币生态当中首个去中心化稳定币命名为 QIAN。 QIAN 由原力协议团队所开发，是原力金融生态的重要成员，在比特币 RSK 侧链和以太坊网络内流通，可以被创造（`mint`）也可以被销毁（`burn`），用于借贷、投资、支付、储值等应用场景。
+**QIAN**：同“乾”，在《易经》当中，乾卦代表天，代表宇宙万物运转的规律，是最崇高的正向能量和精神，遵循这个重要的涵义，我们将比特币生态当中首个去中心化稳定币命名为 QIAN。 QIAN 由The Force Protocol团队所开发，是原力金融生态的重要成员，在比特币 RSK 侧链和以太坊网络内流通，可以被创造（`mint`）也可以被销毁（`burn`），用于借贷、投资、支付、储值等应用场景。
 
-**FOR**：原力协议生态代币，也是 QIAN 系统治理代币，用于对 QIAN 生态治理投票和维持 QIAN 价格稳定。
+**FOR**：The Force Protocol生态代币，也是 QIAN 系统治理代币，用于对 QIAN 生态治理投票和维持 QIAN 价格稳定。
 
 ## III. Pledge management
 
@@ -312,9 +312,9 @@ The QIAN system code will also maintain a fully open-source strategy and will gr
 
 ## 八、项目后期计划和构想
 
-初期， QIAN 将优先在 RSK 和以太坊上搭建。后续，我们会将 QIAN 系统迁移至原力协议金融应用公链，以搭建真正支持多加密资产质押的稳定币系统。原力协议金融应用公链计划部分基于 Tendermint Core 和 COSMOS SDK 开发，同时具备原力协议团队原创的分布式金融应用共识机制，可以支持资产跨链流通和大规模的分布式金融应用开展。
+初期， QIAN 将优先在 RSK 和以太坊上搭建。后续，我们会将 QIAN 系统迁移至The Force Protocol金融应用公链，以搭建真正支持多加密资产质押的稳定币系统。The Force Protocol金融应用公链计划部分基于 Tendermint Core 和 COSMOS SDK 开发，同时具备The Force Protocol团队原创的分布式金融应用共识机制，可以支持资产跨链流通和大规模的分布式金融应用开展。
 
-QIAN 系统的代码也将保持全部开源的策略，并会逐步融入原力协议的金融开放平台，成为原力协议金融应用开发架构的一部分，为更多希望创造去中心化稳定币系统的团队提供技术服务，最终创造出一个全球化的开放加密数字货币市场。
+QIAN 系统的代码也将保持全部开源的策略，并会逐步融入The Force Protocol的金融开放平台，成为The Force Protocol金融应用开发架构的一部分，为更多希望创造去中心化稳定币系统的团队提供技术服务，最终创造出一个全球化的开放加密数字货币市场。
 
 ## IX. Repositories structure
 
