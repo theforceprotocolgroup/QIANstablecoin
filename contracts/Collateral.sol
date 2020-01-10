@@ -37,11 +37,6 @@ contract IWallet {
     function get(address tok) public returns(address);
 }
 
-contract ILiquidauction {
-    function auction(address who, address rve, address oss, 
-        uint256 oam, address iss, uint256 iam, uint256 bid) public returns(uint256);
-}
-
 contract IIndex {
     function inc(address who) public returns(uint256);
 }
@@ -81,20 +76,23 @@ contract Collateral is Authority {
     uint256 public seg;        //单次清算数量(segmentation).
     uint256 public fin;        //清算罚金(fine)
     address public fer;        //喂价器(feeder)
-    address public lau;        //清算器账户地址(liquidation auction).
+    address public pxy;        //清算器代理账户(liquidation auction).
 
     event Feed(uint256 val, uint256 exr);
     event Payback(address indexed who, uint256 s, uint256 c);
     event Borrow(address indexed who, uint256 c, uint256 s);
     event Deposit(address indexed sender, address indexed who, uint256 amount);
     event Withdraw(address indexed sender, address indexed who, uint256 amount);
+    
+    event Liquidate(address who, address rve, address oss, uint256 oam, address iss, uint256 iam, uint256 bid);
+
     /** 初始化 */
 
-    constructor(address w, address t, address d, address l, address i) public {
+    constructor(address w, address t, address d, address p, address i) public {
         wet = w;
         tok = t;
         dor = IDebtor(d);
-        lau = l;
+        pxy = p;
         idx = i;
         hea = true;
         rit = now;
@@ -124,8 +122,8 @@ contract Collateral is Authority {
     function setfer(address v) public auth {
         fer = v;
     }
-    function setlau(address v) public auth {
-        lau = v;
+    function setpxy(address v) public auth {
+        pxy = v;
     }
     function sethea(bool v) public auth {
         hea = v;
@@ -145,7 +143,7 @@ contract Collateral is Authority {
         //最小抵押率(ove): 150%
         //兑换比(exr): val/ove = 1/1.5, 表示1.5个抵押物才兑换1个Qian, 或者说1个抵押物大约能兑换 0.6666666666666666... 个 Qian
         //乘以PRE(10 ** 18)是防止0.6666...被抹成0
-        exr = (pce * PRE * PRE9) / ove;  //[10^27]
+        exr = (pce * PRE27) / ove;  //[10^27]
         emit Feed(pce, exr);
     }
 
@@ -318,14 +316,14 @@ contract Collateral is Authority {
         
         IToken(tok).approve(a, c);
         IAsset(a).deposit(address(this), c);
-        IAsset(a).move(address(this), lau, c);
+        IAsset(a).move(address(this), pxy, c);
 
         //增加系统坏账记录, 在清算回稳定币之前属于一笔无抵押物对应的坏账.
         //并且此时用户持有的稳定币(@debtor.hol[who])数量没有变化, 
         //但是被清算的抵押物和对应的稳定币将以系统坏账的形式存在;
         dor.incb(d);
 
-        ILiquidauction(lau).auction(who, address(dor), tok, c, dor.tok(), umul(d, fin), 0);
+        emit Liquidate(who, address(dor), tok, c, dor.tok(), umul(d, fin), 0);
     }
 
     //获取用户 @who 由当前抵押物中产生的负债(稳定币总量 + 利息)
@@ -465,6 +463,7 @@ contract Collateral is Authority {
     }
 
     /** 系统内部精度 */
-    uint256 constant public PRE9 = 10 ** 9;
     uint256 constant public PRE  = 10 ** 18;
+    uint256 constant public PRE9 = 10 ** 9;
+    uint256 constant public PRE27 = 10 ** 27;
 }

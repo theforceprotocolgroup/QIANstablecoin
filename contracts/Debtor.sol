@@ -17,14 +17,6 @@ contract IAsset {
     function balance(address who) public view returns(uint256);
 }
 
-contract IDebtauction {
-    function auction(address rve, address iss, address oss, uint256 iam, uint256 bid) public returns (uint id);
-}
-
-contract IGovauction {
-    function auction(address rve, address iss, address oss, uint256 oam, uint bid) public returns(uint id);
-}
-
 contract IWallet {
     function get(address tok) public returns(address);
 }
@@ -44,8 +36,7 @@ contract Debtor is Authority {
     
     /** 结算参数 */
 
-    address public dau;                    //债务拍卖合约(debt auction)
-    address public gau;                    //治理拍卖合约(gov auction)
+    address public pxy;                    //债务拍卖/治理拍卖的代理账户(debt auction)
 
     /** 稳定币 */
 
@@ -64,6 +55,10 @@ contract Debtor is Authority {
         
     bool public hea;                      //系统状态标记(healthy), false 表示系统已经停止运行, 并允许捐助者按比例取回
     
+    /** 事件 */
+    event Buy(address rve, address iss, address oss, uint256 iam, uint256 bid);
+    event Sel(address rve, address iss, address oss, uint256 oam, uint bid);
+
     /** 初始化 */
     
     constructor(address w, address s, address g) public {
@@ -81,11 +76,8 @@ contract Debtor is Authority {
     function settdc(uint256 v) public auth {
         tdc = v;
     }
-    function setdau(address v) public auth {
-        dau = v;
-    }
-    function setgau(address v) public auth {
-        gau = v;
+    function setpxy(address v) public auth {
+        pxy = v;
     }
     function sethea(bool v) public auth {
         hea = v;
@@ -177,7 +169,8 @@ contract Debtor is Authority {
         require(usub(bad, cum) >= s,
             "require: usub(bad, cum) >= s");
         cum = uadd(cum, s);
-        IDebtauction(dau).auction(address(this), address(tok), gov, uint16(-1), s);
+
+        emit Buy(address(this), address(tok), gov, uint16(-1), s);
     }
 
     /** 拍卖稳定币 */
@@ -186,9 +179,10 @@ contract Debtor is Authority {
         require(bad == 0 && cum == 0,
             "require: bad == 0 && cum == 0");
         hol[address(this)] = usub(hol[address(this)], s);
-        tok.mint(gau, s);
-        IAsset(wet.get(address(tok))).deposit(gau, s);
-        IGovauction(gau).auction(gov, IGovtoken(gov).tok(), address(tok), s, 0);
+        tok.mint(pxy, s);
+        IAsset(wet.get(address(tok))).deposit(pxy, s);
+
+        emit Sel(gov, IGovtoken(gov).tok(), address(tok), s, 0);
     }
 
     //归还债务
